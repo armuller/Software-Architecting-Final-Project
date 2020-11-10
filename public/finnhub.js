@@ -1,4 +1,5 @@
 // finnhub
+
 const finnhub = require('finnhub');
  
 const api_key = finnhub.ApiClient.instance.authentications['api_key'];
@@ -16,3 +17,4 @@ function getCompanyNews() {
         }
 });
 }
+
