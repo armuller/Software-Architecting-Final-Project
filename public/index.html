@@ -18,24 +18,28 @@
   <!-- Add Firebase products that you want to use -->
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
-
+  
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
   <!-- Set up Tabs -->
-  <button class="tablink" onclick="openPage('Home', this, 'red')" id="defaultOpen">Home</button>
-  <button class="tablink" onclick="openPage('Account Overview', this, 'green')" id="defaultOpen">Account Overview</button>
-  <button class="tablink" onclick="openPage('Buy/Sell', this, 'blue')">Buy/Sell</button>
-  <button class="tablink" onclick="openPage('Social', this, 'orange')">Social</button>
-  <button class="tablink" onclick="openPage('Transactions', this, 'purple')">Transactions</button>
+  <button class="tablink" onclick="openPage('Home', this, 'lightblue')" id="defaultOpen">Home</button>
+  <button class="tablink" onclick="openPage('Account Overview', this, 'lightblue')" id="defaultOpen">Account Overview</button>
+  <button class="tablink" onclick="openPage('Buy/Sell', this, 'lightblue')">Buy/Sell</button>
+  <button class="tablink" onclick="openPage('Social', this, 'lightblue')">Social</button>
+  <button class="tablink" onclick="openPage('Transactions', this, 'lightblue')">Transactions</button>
   
   <div id="Home" class="tabcontent">
     <h3>Home</h3>
-    <input id="email" type="email" placeholder="Email"><br>
-    <input id="password" type="password" placeholder="Password"><br><br>
-    <button id="login">Login</button>
-    <button id="signup">SignUp</button>
-    <button id="logout" style="display:none;">Logout</button>
+    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+      <div class="card-header">Create Account</div>
+      <input id="email" type="email" placeholder="Email"><br>
+      <input id="password" type="password" placeholder="Password"><br>
+    </div>
+    <button id="login" class="btn btn-primary">Login</button>
+    <button id="signup" class="btn btn-primary">SignUp</button>
+    <button id="logout" class="btn btn-primary" style="display:none;">Logout</button>
     <div id="Home target"></div>
   </div>
   
@@ -44,16 +48,16 @@
     <h3>*** Placeholder for Account Table ***</h3>
     <div id="Account overview target"></div>
     <br>
-    <button id="write_user_to_db" onclick="addNewUser()">Write user to DB</button>
-    <button id="read_users_from_db" onclick="getAllUsers()">Get all users from DB</button>
-    <button id="get_current_user_from_db" onclick="getCurrentUser()">Get current user from DB</button>
-    <button id="purchase_stock" onclick="purchaseStock()">Purchase stock</button>
+    <button id="write_user_to_db" class="btn btn-primary" onclick="addNewUser()">Write user to DB</button>
+    <button id="read_users_from_db" class="btn btn-primary" onclick="getAllUsers()">Get all users from DB</button>
+    <button id="get_current_user_from_db" class="btn btn-primary" onclick="getCurrentUser()">Get current user from DB</button>
+    <button id="purchase_stock" class="btn btn-primary" onclick="purchaseStock()">Purchase stock</button>
     <div id="status"></div>
   </div>
   
   <div id="Buy/Sell" class="tabcontent">
     <input id="company" type="company" placeholder="Company Symbol"><br>
-    <button id="stockquote" onclick="getStockQuote()">Get Stock Quote</button>
+    <button id="stockquote" class="btn btn-primary" onclick="getStockQuote()">Get Stock Quote</button>
 
     <h3>*** Placeholder for Trend of Stock Performance ***</h3>
     <div id="Buy target"></div>
@@ -61,12 +65,12 @@
   
   <div id="Social" class="tabcontent">
     <input id="friends" placeholder="Input Friends Email"><br>
-    <button id="friends" onclick="getStockQuote()">See Friend's Performance</button>
+    <button id="friends" class="btn btn-primary" onclick="getStockQuote()">See Friend's Performance</button>
     <div id="Social target"></div>
   </div>
 
   <div id="Transactions" class="tabcontent">
-    <button id="transactions" onclick="">Get past transaction data</button>
+    <button id="transactions" class="btn btn-primary" onclick="">Get past transaction data</button>
     <div id="Transactions target"></div>
   </div>
 

@@ -70,7 +70,7 @@ function getStockQuote(){
             }
             else{
                 console.log('Company Quote Acquired!');
-                document.getElementById("target").innerHTML = JSON.stringify(res.body);
+                document.getElementById("Buy target").innerHTML = JSON.stringify(res.body);
             }
         });
 };
