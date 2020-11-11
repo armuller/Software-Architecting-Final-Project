@@ -21,6 +21,7 @@
     "node": "^15.0.1",
     "require": "^2.4.20",
     "superagent": "^6.1.0",
+    "vue": "^2.6.12",
     "websocket": "^1.0.32"
   },
   "devDependencies": {
