@@ -44,15 +44,37 @@ console.log('At finnhub.js')
 // });
  
 //Company News
-function getCompanyNews() {
-    var finnhub = require('finnhub')    
-    var finnhubClient = new finnhub.DefaultApi()
-    console.log(finnhubClient)
-    finnhubClient.companyNews("AAPL", "2020-11-08", "2020-11-09", (error, data, response) => {
-        if (error) {
-            console.error(error);
-        } else {
-            console.log(data)
-        }
-    });
+// function getCompanyNews() {
+//     var finnhub = require('finnhub')    
+//     var finnhubClient = new finnhub.DefaultApi()
+//     console.log(finnhubClient)
+//     finnhubClient.companyNews("AAPL", "2020-11-08", "2020-11-09", (error, data, response) => {
+//         if (error) {
+//             console.error(error);
+//         } else {
+//             console.log(data)
+//         }
+//     });
+// };
+
+
+function getCompanyNews(){
+    var ticker = document.getElementById('company').value;
+    var startDate = "2020-11-08"
+    var endDate = "2020-11-09"
+
+    var url = '/companynews/' + ticker + '/' + startDate +'/' + endDate;
+
+    superagent
+        .get(url)
+        .end(function(err, res){
+            if(err){
+                console.log(err);
+                document.getElementById("target").innerHTML = "Acquiring Company News Failed!";
+            }
+            else{
+                console.log('Company News Acquired!');
+                document.getElementById("target").innerHTML = JSON.stringify(res.body);
+            }
+        });
 };
