@@ -26,6 +26,7 @@
   <script src="login.js"></script>
   <script src='finnhub.js'></script>
   <script src='tabs.js'></script>
+  <script src='database.js'></script>
   <!-- Test Trading Vue -->  
   <script src="trading-vue.min.js"></script>
   
@@ -50,6 +51,12 @@
     <h3>Your Stonks are Impressive</h3>
     <h3>*** Placeholder for Account Table ***</h3>
     <div id="Account overview target"></div>
+    <br>
+    <button id="write_user_to_db" onclick="addNewUser()">Write user to DB</button>
+    <button id="read_users_from_db" onclick="getAllUsers()">Get all users from DB</button>
+    <button id="get_current_user_from_db" onclick="getCurrentUser()">Get current user from DB</button>
+    <button id="purchase_stock" onclick="purchaseStock()">Purchase stock</button>
+    <div id="status"></div>
   </div>
   
   <div id="Buy/Sell" class="tabcontent">
