@@ -1,12 +1,17 @@
 <!doctype html>
 
 <html lang="en">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.8.3/superagent.min.js"></script>
-
+ 
 <head>
   <!-- The core Firebase JS SDK is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
-
+  
+  <!-- Superagent -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.8.3/superagent.min.js"></script>
+  
+  <!-- Boostrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  
   <!-- TODO: Add SDKs for Firebase products that you want to use
   https://firebase.google.com/docs/web/setup#available-libraries -->
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
@@ -17,23 +22,57 @@
 </head>
 
 <body>
-  <input id="email" type="email" placeholder="Email"><br>
-  <input id="password" type="password" placeholder="Password"><br><br>
-  <button id="login">Login</button>
-  <button id="signup">SignUp</button>
-  <button id="logout" style="display:none;">Logout</button>
-
-  <input id="company" type="company" placeholder="Company"><br>
-  <button id="companynews" onclick="getStockQuote()">Get Company news</button>
-
+  <!-- Import Source Scripts-->
   <script src="login.js"></script>
   <script src='finnhub.js'></script>
+  <script src='tabs.js'></script>
   <!-- Test Trading Vue -->  
   <script src="trading-vue.min.js"></script>
+  
+  <!-- Set up Tabs -->
+  <button class="tablink" onclick="openPage('Home', this, 'red')" id="defaultOpen">Home</button>
+  <button class="tablink" onclick="openPage('Account Overview', this, 'green')" id="defaultOpen">Account Overview</button>
+  <button class="tablink" onclick="openPage('Buy/Sell', this, 'blue')">Buy/Sell</button>
+  <button class="tablink" onclick="openPage('Social', this, 'orange')">Social</button>
+  <button class="tablink" onclick="openPage('Transactions', this, 'purple')">Transactions</button>
+  
+  <div id="Home" class="tabcontent">
+    <h3>Home</h3>
+    <input id="email" type="email" placeholder="Email"><br>
+    <input id="password" type="password" placeholder="Password"><br><br>
+    <button id="login">Login</button>
+    <button id="signup">SignUp</button>
+    <button id="logout" style="display:none;">Logout</button>
+  </div>
+  
+  <div id="Account Overview" class="tabcontent">
+    <h3>News</h3>
+    <input id="company" type="company" placeholder="Company"><br>
+    <button id="companynews" onclick="getStockQuote()">Get Company news</button>
+  </div>
+  
+  <div id="Buy/Sell" class="tabcontent">
+    <h3>Contact</h3>
+    <p>Get in touch, or swing by for a cup of coffee.</p>
+  </div>
+  
+  <div id="Social" class="tabcontent">
+    <h3>About</h3>
+    <p>Who we are and what we do.</p>
+  </div>
+
+  <div id="Transactions" class="tabcontent">
+    <h3>About</h3>
+    <p>Who we are and what we do.</p>
+  </div>
 
   <div id="target"></div>
 
 </body>
 
+<script>
+// Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click();
+</script>
 
 </html>
