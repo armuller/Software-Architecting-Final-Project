@@ -19,18 +19,9 @@ const finnhubClient = new finnhub.DefaultApi()
 //     }
 // });
 
-// stock quote
-request(`https://finnhub.io/api/v1/quote?symbol=AAPL&token=${token}`, { json: true }, (err, res, body) => {
-  if (err) { return console.log(err); }
-  console.log('successfully received stock information')
-  console.log(body);
-});
 
 */
-const express = require('express');
-const app     = express();
 
-console.log('At finnhub.js')
 
 
 // var request = require('request')
@@ -43,20 +34,6 @@ console.log('At finnhub.js')
 //     console.log(data)
 // });
  
-//Company News
-// function getCompanyNews() {
-//     var finnhub = require('finnhub')    
-//     var finnhubClient = new finnhub.DefaultApi()
-//     console.log(finnhubClient)
-//     finnhubClient.companyNews("AAPL", "2020-11-08", "2020-11-09", (error, data, response) => {
-//         if (error) {
-//             console.error(error);
-//         } else {
-//             console.log(data)
-//         }
-//     });
-// };
-
 
 function getCompanyNews(){
     var ticker = document.getElementById('company').value;
@@ -78,3 +55,29 @@ function getCompanyNews(){
             }
         });
 };
+
+function getStockQuote(){
+    var ticker = document.getElementById('company').value;
+
+    var url = '/stockquote/' + ticker;
+
+    superagent
+        .get(url)
+        .end(function(err, res){
+            if(err){
+                console.log(err);
+                document.getElementById("target").innerHTML = "Acquiring Company Quote Failed!";
+            }
+            else{
+                console.log('Company Quote Acquired!');
+                document.getElementById("target").innerHTML = JSON.stringify(res.body);
+            }
+        });
+};
+
+// stock quote
+// request(`https://finnhub.io/api/v1/quote?symbol=AAPL&token=${token}`, { json: true }, (err, res, body) => {
+//   if (err) { return console.log(err); }
+//   console.log('successfully received stock information')
+//   console.log(body);
+// });
