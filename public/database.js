@@ -17,19 +17,22 @@ var db = firebase.database();
 
 function addNewUser() {
     const status  = document.getElementById('status');
-    console.log('current user uid is: ' + firebase.auth().currentUser.uid)
-    const email = 'test@gmail.com'
-    const name = 'ehau test'
+
+    const firebaseUser = firebase.auth().currentUser
+    console.log('current user is: ' + firebaseUser)
+    const email = firebaseUser.email
+    const name = email.substring(0, email.indexOf('@')) // todo: can probably update to ask for the user's name, but for now just take whatever is in front of '@'
     const users = db.ref('users')
-    const userId = firebase.auth().currentUser.uid
-    // const id = email.substring(0, email.indexOf('@'))
-    console.log('id is ' + userId)
+    const userId = firebaseUser.uid
+
     // write to db
     users.child(userId).set({email, name})
     .then(function(){
+        console.log(`successfully added new user to DB: ${email}`)
         status.innerHTML = "Wrote to DB!";
     })
     .catch(function(err) {
+        console.log(`failed added new user to DB: ${email}`)
         status.innerHTML = 'There was an error. did not write to DB';
     });
 }

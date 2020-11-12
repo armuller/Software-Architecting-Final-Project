@@ -1,3 +1,4 @@
+
 (function(){
 
     // Your web app's Firebase configuration
@@ -66,6 +67,17 @@
 	firebase.auth().onAuthStateChanged(firebaseUser => {
 		if(firebaseUser){
 			console.log(firebaseUser);
+			const userId = firebaseUser.uid;
+			firebase.database().ref('/users/' + userId).once('value', snapshot => {
+				if (snapshot.exists()) {
+					console.log('account exists!')
+					console.log(snapshot.val());
+				} else {
+					console.log('account does not exist yet')
+					console.log(userId)
+					addNewUser()
+				}
+			})
 			logout.style.display = 'inline';
 			login.style.display  = 'none';
 			signup.style.display = 'none';
