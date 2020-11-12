@@ -75,6 +75,33 @@ function getStockQuote(){
         });
 };
 
+
+
+function getCandleStick(){
+    var ticker = document.getElementById('company').value;
+    var endDate = parseInt(new Date().getTime()/1000)
+    var startDate = endDate - 30*24*60*60;
+
+    console.log(startDate);
+    console.log(endDate);
+
+    var url = '/candlestick/' + ticker + '/' + startDate +'/' + endDate;
+
+    superagent
+        .get(url)
+        .end(function(err, res){
+            if(err){
+                console.log(err);
+                document.getElementById("target").innerHTML = "Acquiring CandleStick Failed!";
+            }
+            else{
+                console.log('Company Candle Stick Acquired!');
+                document.getElementById("target").innerHTML = JSON.stringify(res.body);
+            }
+        });
+};
+
+
 // stock quote
 // request(`https://finnhub.io/api/v1/quote?symbol=AAPL&token=${token}`, { json: true }, (err, res, body) => {
 //   if (err) { return console.log(err); }
