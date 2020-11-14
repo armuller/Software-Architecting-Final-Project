@@ -37,8 +37,8 @@ const finnhubClient = new finnhub.DefaultApi()
 
 function getCompanyNews(){
     var ticker = document.getElementById('company').value;
-    var startDate = "2020-11-08"
-    var endDate = "2020-11-09"
+    var endDate = parseInt(new Date().getTime()/1000)
+    var startDate = endDate - 30*24*60*60;
 
     var url = '/companynews/' + ticker + '/' + startDate +'/' + endDate;
 
@@ -82,9 +82,6 @@ function getCandleStick(){
     var endDate = parseInt(new Date().getTime()/1000)
     var startDate = endDate - 30*24*60*60;
 
-    console.log(startDate);
-    console.log(endDate);
-
     var url = '/candlestick/' + ticker + '/' + startDate +'/' + endDate;
 
     superagent
@@ -101,6 +98,11 @@ function getCandleStick(){
         });
 };
 
+
+function buyAndSell(){
+    getStockQuote();
+    getCandleStick();
+}
 
 // stock quote
 // request(`https://finnhub.io/api/v1/quote?symbol=AAPL&token=${token}`, { json: true }, (err, res, body) => {
