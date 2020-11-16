@@ -35,8 +35,8 @@ function getStockQuote() {
                 console.log('Company Quote Acquired!');
                 //document.getElementById("stock_quote").innerHTML = JSON.stringify(res.body);
                 document.getElementById("ticker").innerHTML = ticker;
-                document.getElementById("open").innerHTML = "$"+res.body.o;
-                document.getElementById("close").innerHTML = "$"+res.body.c;
+                document.getElementById("open").innerHTML = "$"+round(res.body.o,2);
+                document.getElementById("close").innerHTML = "$"+round(res.body.c,2);
             }
         });
 };
@@ -107,6 +107,11 @@ function timeConverter(UNIX_timestamp){
     return time;
   }
   console.log(timeConverter(0));
+
+function round(value, decimals) {
+    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+  }
+
 
 // stock quote
 // request(`https://finnhub.io/api/v1/quote?symbol=AAPL&token=${token}`, { json: true }, (err, res, body) => {

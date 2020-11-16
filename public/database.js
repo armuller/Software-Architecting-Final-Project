@@ -24,9 +24,10 @@ function addNewUser() {
     const name = email.substring(0, email.indexOf('@')) // todo: can probably update to ask for the user's name, but for now just take whatever is in front of '@'
     const users = db.ref('users')
     const userId = firebaseUser.uid
+    const balance = 0;
 
     // write to db
-    users.child(userId).set({email, name})
+    users.child(userId).set({email, name, balance})
     .then(function(){
         console.log(`successfully added new user to DB: ${email}`)
         status.innerHTML = "Wrote to DB!";
@@ -83,7 +84,22 @@ function purchaseStock() {
         status.innerHTML = "Purchased stock!"
         return db.ref('users').update(updates)
         
-      });
-    
-        
+      });     
 }
+
+/*
+function depositFunds(balance) {
+    const userId = firebase.auth().currentUser.uid
+    const status  = document.getElementById('status');
+    db.ref('/users/' + userId).once('value').then(function(snapshot) {
+        currentUser = snapshot.val()
+        console.log('current user information is')
+        console.log(currentUser)
+        currentUser['balance'] = 0;
+        console.log('current user after deposit')
+        console.log(currentUser)
+        var updates = {}
+        updates[userId] = currentUser
+        status.innerHTML = "Deposited Funds!"
+        return db.ref('users').update(updates)
+} */
