@@ -63,11 +63,27 @@
   </div>
   
   <div id="Buy/Sell" class="tabcontent">
-    <input id="company" type="company" placeholder="Company Symbol"><br>
-    <button id="stockquote" class="btn btn-primary" onclick="buyAndSell()">Get Stock Quote</button>
-    <button id="stockquote" class="btn btn-primary" onclick="getCandleStick()">Get Stock Trend</button>
-    <div id = 
-    <canvas id="Buy target" class="chartjs"></canvas>
+    <input id="company" type="company" placeholder="Company Symbol" style="position:absolute; top:100px; left:30px;"><br>
+    <button id="stockquote" class="btn btn-primary" onclick="buyAndSell()" style="position:absolute; top:150px; left:30px;">Get Stock Quote</button>
+    <div id = "stock_graph" style="position:absolute; top:200px; left:100px; width:50%; height:50%;">
+      <canvas id="stock_graph_canvas"></canvas>
+    </div>
+    <div id = "stock_quote" style="position:absolute; top:200px; left:30px;">
+      <table width = "100" border="1">
+        <tr>
+          <td>Stock</td>
+          <td id="ticker"></td>
+        </tr>
+        <tr>
+          <td>Opening Price</td>
+          <td id="open">    </td>
+        </tr>
+        <tr>
+          <td>Closing Price</td>
+          <td id="close">    </td>
+        </tr>
+      </table>
+    </div> 
   </div>
   
   <div id="Social" class="tabcontent">

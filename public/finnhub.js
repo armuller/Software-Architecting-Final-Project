@@ -33,11 +33,13 @@ function getStockQuote() {
             }
             else {
                 console.log('Company Quote Acquired!');
-                document.getElementById("Buy target").innerHTML = JSON.stringify(res.body);
+                //document.getElementById("stock_quote").innerHTML = JSON.stringify(res.body);
+                document.getElementById("ticker").innerHTML = ticker;
+                document.getElementById("open").innerHTML = "$"+res.body.o;
+                document.getElementById("close").innerHTML = "$"+res.body.c;
             }
         });
 };
-
 
 
 function getCandleStick() {
@@ -52,16 +54,23 @@ function getCandleStick() {
         .end(function (err, res) {
             if (err) {
                 console.log(err);
-                document.getElementById("target").innerHTML = "Acquiring CandleStick Failed!";
+                document.getElementById("stock_graph_canvas").innerHTML = "Acquiring CandleStick Failed!";
             }
             else {
                 console.log('Company Candle Stick Acquired!');
+                
+                var i;
+                var time = [];
+                for (i=0; i < res.body.t.length; i++) {
+                    time.push(timeConverter(res.body.t[i]));
+                }
+                console.log(time);
                 var myLineChart2 = new Chart(
-                  document.getElementById("Buy target"),
+                  document.getElementById("stock_graph_canvas"),
                   {
                     type: "line",
                     data: {
-                      labels: res.body.t,
+                      labels: time,
                       datasets: [
                         {
                           label: ticker + " Stock Price",
@@ -84,6 +93,20 @@ function buyAndSell() {
     getStockQuote();
     getCandleStick();
 }
+
+function timeConverter(UNIX_timestamp){
+    var a = new Date(UNIX_timestamp * 1000);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    var hour = a.getHours();
+    var min = a.getMinutes();
+    var sec = a.getSeconds();
+    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+    return time;
+  }
+  console.log(timeConverter(0));
 
 // stock quote
 // request(`https://finnhub.io/api/v1/quote?symbol=AAPL&token=${token}`, { json: true }, (err, res, body) => {
