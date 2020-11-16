@@ -36,7 +36,7 @@ function getStockQuote() {
                 //document.getElementById("stock_quote").innerHTML = JSON.stringify(res.body);
                 document.getElementById("ticker").innerHTML = ticker;
                 document.getElementById("open").innerHTML = "$"+round(res.body.o,2);
-                document.getElementById("close").innerHTML = "$"+round(res.body.c,2);
+                document.getElementById("current").innerHTML = "$"+round(res.body.c,2);
             }
         });
 };
