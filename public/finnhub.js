@@ -94,6 +94,7 @@ function buyAndSell() {
     getCandleStick();
 }
 
+// Got this from stack overflow
 function timeConverter(UNIX_timestamp){
     var a = new Date(UNIX_timestamp * 1000);
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -108,6 +109,7 @@ function timeConverter(UNIX_timestamp){
   }
   console.log(timeConverter(0));
 
+// Got this from stack overflow
 function round(value, decimals) {
     return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
   }
