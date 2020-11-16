@@ -22,6 +22,10 @@
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
   
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Chart JS-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
 </head>
 
 <body>
@@ -61,9 +65,10 @@
   <div id="Buy/Sell" class="tabcontent">
     <input id="company" type="company" placeholder="Company Symbol"><br>
     <button id="stockquote" class="btn btn-primary" onclick="buyAndSell()">Get Stock Quote</button>
+    <button id="stockquote" class="btn btn-primary" onclick="getCandleStick()">Get Stock Trend</button>
 
     <h3>*** Placeholder for Trend of Stock Performance ***</h3>
-    <div id="Buy target"></div>
+    <canvas id="Buy target" class="chartjs"></canvas>
   </div>
   
   <div id="Social" class="tabcontent">

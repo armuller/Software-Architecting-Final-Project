@@ -1,74 +1,37 @@
-// finnhub
-
-/*
-var finnhub = require('finnhub')
-var request = require('request')
-var token = 'buko60n48v6qi7364sag'
-
-const api_key = finnhub.ApiClient.instance.authentications['api_key'];
-api_key.apiKey = token // Replace this
-const finnhubClient = new finnhub.DefaultApi()
-
-//Company News
-// finnhubClient.companyNews("AAPL", "2020-11-08", "2020-11-09", (error, data, response) => {
-//     if (error) {
-//         console.error(error);
-//     } else {
-//         console.log('received company news')
-//         console.log(data)
-//     }
-// });
-
-
-*/
-
-
-
-// var request = require('request')
-// const api_key = finnhub.ApiClient.instance.authentications['api_key'];
-// api_key.apiKey = "buko60n48v6qi7364sag" // Replace this
-
-// Stock candles
-// finnhubClient.stockCandles("AAPL", "D", 1590988249, 1591852249, {}, (error, data, response) => {
-//     console.log('stock candles')
-//     console.log(data)
-// });
- 
-
-function getCompanyNews(){
+function getCompanyNews() {
     var ticker = document.getElementById('company').value;
-    var endDate = parseInt(new Date().getTime()/1000)
-    var startDate = endDate - 30*24*60*60;
+    var endDate = parseInt(new Date().getTime() / 1000)
+    var startDate = endDate - 30 * 24 * 60 * 60;
 
-    var url = '/companynews/' + ticker + '/' + startDate +'/' + endDate;
+    var url = '/companynews/' + ticker + '/' + startDate + '/' + endDate;
 
     superagent
         .get(url)
-        .end(function(err, res){
-            if(err){
+        .end(function (err, res) {
+            if (err) {
                 console.log(err);
                 document.getElementById("target").innerHTML = "Acquiring Company News Failed!";
             }
-            else{
+            else {
                 console.log('Company News Acquired!');
                 document.getElementById("target").innerHTML = JSON.stringify(res.body);
             }
         });
 };
 
-function getStockQuote(){
+function getStockQuote() {
     var ticker = document.getElementById('company').value;
 
     var url = '/stockquote/' + ticker;
 
     superagent
         .get(url)
-        .end(function(err, res){
-            if(err){
+        .end(function (err, res) {
+            if (err) {
                 console.log(err);
                 document.getElementById("target").innerHTML = "Acquiring Company Quote Failed!";
             }
-            else{
+            else {
                 console.log('Company Quote Acquired!');
                 document.getElementById("Buy target").innerHTML = JSON.stringify(res.body);
             }
@@ -77,29 +40,47 @@ function getStockQuote(){
 
 
 
-function getCandleStick(){
+function getCandleStick() {
     var ticker = document.getElementById('company').value;
-    var endDate = parseInt(new Date().getTime()/1000)
-    var startDate = endDate - 30*24*60*60;
+    var endDate = parseInt(new Date().getTime() / 1000)
+    var startDate = endDate - 30 * 24 * 60 * 60;
 
-    var url = '/candlestick/' + ticker + '/' + startDate +'/' + endDate;
+    var url = '/candlestick/' + ticker + '/' + startDate + '/' + endDate;
 
     superagent
         .get(url)
-        .end(function(err, res){
-            if(err){
+        .end(function (err, res) {
+            if (err) {
                 console.log(err);
                 document.getElementById("target").innerHTML = "Acquiring CandleStick Failed!";
             }
-            else{
+            else {
                 console.log('Company Candle Stick Acquired!');
-                document.getElementById("target").innerHTML = JSON.stringify(res.body);
+                var myLineChart2 = new Chart(
+                  document.getElementById("Buy target"),
+                  {
+                    type: "line",
+                    data: {
+                      labels: res.body.t,
+                      datasets: [
+                        {
+                          label: "My First Dataset",
+                          data: res.body.c,
+                          fill: false,
+                          borderColor: "rgb(75, 192, 192)",
+                          lineTension: 0.1,
+                        },
+                      ],
+                    },
+                    options: {},
+                  }
+                );
             }
         });
 };
 
 
-function buyAndSell(){
+function buyAndSell() {
     getStockQuote();
     getCandleStick();
 }
