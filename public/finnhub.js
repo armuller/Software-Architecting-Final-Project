@@ -64,7 +64,7 @@ function getCandleStick() {
                       labels: res.body.t,
                       datasets: [
                         {
-                          label: "My First Dataset",
+                          label: ticker + " Stock Price",
                           data: res.body.c,
                           fill: false,
                           borderColor: "rgb(75, 192, 192)",
