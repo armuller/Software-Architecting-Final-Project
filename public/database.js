@@ -72,7 +72,7 @@ function purchaseStock() {
         currentUser = snapshot.val()
         console.log('current user information is')
         console.log(currentUser)
-        currentUser['stocks'] = {
+        currentUser['transactions'] = {
             'symbol': 'AAPL',
             'purchase_date': new Date().getTime(),
             'number of shares': 2
@@ -87,19 +87,22 @@ function purchaseStock() {
       });     
 }
 
-/*
-function depositFunds(balance) {
+function depositFunds() {
+    const depositAmount = parseFloat(document.getElementById('deposit_amount').value)
+    console.log('deposit amount is ' + depositAmount)
     const userId = firebase.auth().currentUser.uid
     const status  = document.getElementById('status');
     db.ref('/users/' + userId).once('value').then(function(snapshot) {
         currentUser = snapshot.val()
         console.log('current user information is')
         console.log(currentUser)
-        currentUser['balance'] = 0;
+        const balance = parseFloat(currentUser['balance']) + depositAmount
+        currentUser['balance'] = parseFloat(balance);
         console.log('current user after deposit')
         console.log(currentUser)
         var updates = {}
         updates[userId] = currentUser
-        status.innerHTML = "Deposited Funds!"
+        status.innerHTML = `Deposited $${depositAmount}! New balance is: $${balance}`
         return db.ref('users').update(updates)
-} */
+  });
+}
