@@ -35,7 +35,7 @@
   <button class="tablink" onclick="openPage('Buy/Sell', this, 'lightblue')">Buy/Sell</button>
   <button class="tablink" onclick="openPage('Social', this, 'lightblue')">Social</button>
   <button class="tablink" onclick="openPage('Transactions', this, 'lightblue')">Transactions</button>
-  
+
   <div id="Home" class="tabcontent">
     <h3>Home</h3>
     <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
@@ -48,7 +48,7 @@
     <button id="logout" class="btn btn-primary" style="display:none;">Logout</button>
     <div id="home_target"></div>
   </div>
-  
+
   <div id="Account Overview" class="tabcontent">
     <h3>Your Stonks are Impressive</h3>
     <h3>*** Placeholder for Account Table ***</h3>
@@ -56,8 +56,12 @@
     <br>
     <button id="read_users_from_db" class="btn btn-primary" onclick="getAllUsers()">Get all users from DB</button>
     <button id="get_current_user_from_db" class="btn btn-primary" onclick="getCurrentUser()">Get current user from DB</button>
-    <button id="purchase_stock" class="btn btn-primary" onclick="purchaseStock()">Purchase stock</button>
-    <br>
+    <div class="input-group mb-3 mt-3" style="max-width: 50rem;">
+      <input id="stock_ticker" type="text" class="form-control" aria-label="Stock Ticker" placeholder="stock symbol">
+      <input id="num_shares" type="text" class="form-control ml-2" aria-label="Number of shares" placeholder="number of shares (positive number to buy and negative number to sell)">
+      <button id="purchase_stock" class="btn btn-primary ml-3" onclick="purchaseStock()">Buy/ Sell stock</button>
+    </div>
+
     <div class="input-group mb-3 mt-3" style="max-width: 20rem;">
       <div class="input-group-prepend">
         <span class="input-group-text">$</span>
@@ -68,12 +72,12 @@
 
     <div id="status"></div>
   </div>
-  
+
   <div id="Buy/Sell" class="tabcontent">
     <input id="company" type="company" placeholder="Company Symbol" style="position:absolute; top:100px; left:30px;"><br>
     <button id="stockquote" class="btn btn-primary" onclick="buyAndSell()" style="position:absolute; top:150px; left:30px;">Get Stock Quote</button>
     <div id = "stock_graph" style="position:absolute; top:200px; left:100px; width:50%; height:50%;">
-      <canvas id="stock_graph_canvas"></canvas>
+      <canvas id="stock_graph_canvas" class="ml-5"></canvas>
     </div>
     <div id = "stock_quote" style="position:absolute; top:200px; left:30px;">
       <table width = "100" border="1">
