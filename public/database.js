@@ -57,9 +57,8 @@ function getCurrentUser() {
         results = snapshot.val()
         // var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
         // ...
-        status.innerHTML = "Got current user from DB"
+        status.innerHTML = "Got current user from DB: " + JSON.stringify(results)
       });
-    // return results
 }
 
 function purchaseStock() {

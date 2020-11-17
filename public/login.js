@@ -75,6 +75,7 @@
 				} else {
 					console.log('account does not exist yet')
 					console.log(userId)
+					// add new user to DB if the user does not exist yet
 					addNewUser()
 				}
 			})
