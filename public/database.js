@@ -29,7 +29,7 @@ function addNewUser() {
   // write to db
   users
     .child(userId)
-    .set({ email, name, balance })
+    .set({ email, name, balance, transactions: [] })
     .then(function () {
       console.log(`successfully added new user to DB: ${email}`);
       status.innerHTML = "Wrote to DB!";
@@ -91,12 +91,12 @@ function purchaseStock() {
     const currentUser = await getCurrentUser();
     // console.log('user is')
     // console.log(currentUser)
-    currentUser["transactions"] = {
+    currentUser["transactions"].push({
       symbol: stock,
       purchase_date: new Date().getTime(),
       "number of shares": numShares,
       price: currentPrice, // get this info from finnhub
-    };
+    });
     console.log("current user after stock purchase");
     console.log(currentUser);
     var updates = {};
@@ -107,6 +107,29 @@ function purchaseStock() {
         : `Sold ${numShares} shares of ${stock}!`;
     return db.ref("users").update(updates);
   })();
+}
+
+
+/**
+ * get user portfolio for displaying account information on the UI
+ *
+ * @return JSON object containing information on stocks user owns, # of shares, cost basis, unrealized gains/ losses, % gain/ loss
+ */
+function getUserPortfolio() {
+  // get all of user's transactions
+  // loop through and aggregate data on stocks user owns, # of shares, cost basis, unrealized gains/ losses, % gain/ loss
+  // auto-refresh the user account table after the account is made
+  // cost basis from weighted average of the purchase history
+  // unrealized gains & losses we need to ping finnhub for current price
+}
+
+/**
+ * Given a buy/ sell transaction, depending on whether the user bought or sold, update user's cash balance
+ *
+ * @param object transaction
+ */
+function updateCashBalance(transaction) {
+  
 }
 
 function depositFunds() {
