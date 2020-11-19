@@ -39,6 +39,9 @@ function getStockQuote(quote = null) {
           "$" + round(res.body.c, 2);
         return res.body;
       })
+      .catch((err) => {
+          console.log(err)
+      })
       .then((result) => {
         resolve(result);
       });
