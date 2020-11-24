@@ -88,6 +88,7 @@ function purchaseStock() {
   const status = document.getElementById("status");
   const stock = document.getElementById("stock_ticker").value;
   const numShares = parseInt(document.getElementById("num_shares").value);
+
   (async () => {
     const stockQuoteInfo = await getStockQuote(stock);
     // const currentPrice = getStockQuote(stock)
@@ -95,23 +96,34 @@ function purchaseStock() {
     console.log(stockQuoteInfo);
     const currentPrice = stockQuoteInfo.c;
     const currentUser = await getCurrentUser();
+    const balance = currentUser.balance;
     // console.log('user is')
-    console.log(currentPrice)
-    currentUser.transactions.push({
-      symbol: stock,
-      purchase_date: new Date().getTime(),
-      num_shares: numShares,
-      price: currentPrice, // get this info from finnhub
-    });
-    console.log("current user after stock purchase");
-    console.log(currentUser);
-    var updates = {};
-    updates[userId] = currentUser;
-    status.innerHTML =
-      numShares > 0
-        ? `Purchased ${numShares} shares of ${stock}!`
-        : `Sold ${numShares} shares of ${stock}!`;
-    return db.ref("users").update(updates);
+
+    // determine if user has sufficient balance:
+    const transCost = numShares * currentPrice;
+    if (transCost <= balance) {
+      console.log(currentPrice)
+      currentUser.transactions.push({
+        symbol: stock,
+        purchase_date: new Date().getTime(),
+        num_shares: numShares,
+        price: currentPrice, // get this info from finnhub
+      });
+      console.log("current user after stock purchase");
+      console.log(currentUser);
+      var updates = {};
+      updates[userId] = currentUser;
+      status.innerHTML =
+        numShares > 0
+          ? `Purchased ${numShares} shares of ${stock}!`
+          : `Sold ${numShares} shares of ${stock}!`;
+      return db.ref("users").update(updates);
+    }
+    else {
+      console.log("error, insufficient balance");
+      status.innerHTML =
+        'Error, insufficient balance to make this purchase'
+    }
   })();
 }
 
