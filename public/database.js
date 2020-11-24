@@ -111,6 +111,13 @@ function purchaseStock() {
       });
       console.log("current user after stock purchase");
       console.log(currentUser);
+      
+      // update balance
+      newbal = balance - transCost;
+      var changes = {};
+      changes[userId + '/balance'] = newbal;
+      db.ref("users").update(changes);
+
       var updates = {};
       updates[userId] = currentUser;
       status.innerHTML =
