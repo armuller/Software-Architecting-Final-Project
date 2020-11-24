@@ -16,6 +16,7 @@ if (!firebase.apps.length) {
 var db = firebase.database();
 
 function addNewUser() {
+  resetAllHTMLDivs();
   const status = document.getElementById("status");
 
   const firebaseUser = firebase.auth().currentUser;
@@ -25,12 +26,7 @@ function addNewUser() {
   const users = db.ref("users");
   const userId = firebaseUser.uid;
   const balance = 0;
-  var transactions = [{
-    symbol: "",
-    purchase_date: new Date().getTime(),
-    num_shares: 0,
-    price: 0, 
-  }];
+  var transactions = [];
 
   // write to db
   users
@@ -47,6 +43,7 @@ function addNewUser() {
 }
 
 function getAllUsers() {
+  resetAllHTMLDivs();
   const status = document.getElementById("status");
   return db
     .ref("/users/")
@@ -60,6 +57,7 @@ function getAllUsers() {
 }
 
 function getCurrentUser() {
+  resetAllHTMLDivs();
   const userId = firebase.auth().currentUser.uid;
   let results = null;
   const status = document.getElementById("status");
@@ -71,8 +69,8 @@ function getCurrentUser() {
         results = snapshot.val();
         // var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
         // ...
-        status.innerHTML =
-          "Got current user from DB: " + JSON.stringify(results);
+        // status.innerHTML =
+        //   "Got current user from DB: " + JSON.stringify(results);
         return results;
       })
       .then((result) => {
@@ -83,9 +81,12 @@ function getCurrentUser() {
 
 // todo: check if number is negative that the user has enough shares to sell. If the number is positive user has enough money to buy
 // todo: transactions needs to be a list we continuously append to, not an object that keeps replacing itself
-function purchaseStock() {
+function purchaseStock(isBuy) {
+  resetAllHTMLDivs();
+  console.log('is buy is: ' + isBuy)
   const userId = firebase.auth().currentUser.uid;
   const status = document.getElementById("status");
+  const butSellResult = document.getElementById("buy_sell_result")
   const stock = document.getElementById("stock_ticker").value;
   const numShares = parseInt(document.getElementById("num_shares").value);
 
@@ -97,40 +98,47 @@ function purchaseStock() {
     const currentPrice = stockQuoteInfo.c;
     const currentUser = await getCurrentUser();
     const balance = currentUser.balance;
-    // console.log('user is')
+    console.log('user is')
+    console.log(currentUser)
 
-    // determine if user has sufficient balance:
+    // determine if user has sufficient balance if the user is buying stocks:
     const transCost = numShares * currentPrice;
-    if (transCost <= balance) {
-      console.log(currentPrice)
-      currentUser.transactions.push({
-        symbol: stock,
-        purchase_date: new Date().getTime(),
-        num_shares: numShares,
-        price: currentPrice, // get this info from finnhub
-      });
-      console.log("current user after stock purchase");
-      console.log(currentUser);
-      
-      // update balance
-      newbal = balance - transCost;
-      var changes = {};
-      changes[userId + '/balance'] = newbal;
-      db.ref("users").update(changes);
+    if (isBuy) {
+      if (transCost <= balance) {
+        console.log(currentPrice)
+        console.log(currentUser.transactions)
+        console.log(currentUser)
+        currentUser.transactions.push({
+          symbol: stock,
+          purchase_date: new Date().getTime(),
+          num_shares: numShares,
+          price: currentPrice, // get this info from finnhub
+        });
+        console.log("current user after stock purchase");
+        console.log(currentUser);
 
-      var updates = {};
-      updates[userId] = currentUser;
-      status.innerHTML =
-        numShares > 0
-          ? `Purchased ${numShares} shares of ${stock}!`
-          : `Sold ${numShares} shares of ${stock}!`;
-      return db.ref("users").update(updates);
+        // update balance
+        updateCashBalance(-transCost)
+
+        var updates = {};
+        updates[userId] = currentUser;
+        butSellResult.innerHTML = `Purchased ${numShares} shares of ${stock}!`
+          // numShares > 0
+            // ? `Purchased ${numShares} shares of ${stock}!`
+            // : `Sold ${numShares} shares of ${stock}!`;
+        return db.ref("users").update(updates);
+      } else {
+        console.log("error, insufficient balance");
+        status.innerHTML =
+          'Error, insufficient balance to make this purchase'
+      }
+    } else {
+      // selling stocks
+      // check if we have enough shares of the stock to sell (perhaps by calling getUserPortfolio first)
+      // if so, add the transactions indicating the sell and update the cash balance
+      // otherwise, show an error
     }
-    else {
-      console.log("error, insufficient balance");
-      status.innerHTML =
-        'Error, insufficient balance to make this purchase'
-    }
+
   })();
 }
 
@@ -149,33 +157,42 @@ function getUserPortfolio() {
 }
 
 /**
- * Given a buy/ sell transaction, depending on whether the user bought or sold, update user's cash balance
+ * Given an amount to update the balance by, update the user's cash balance
  *
- * @param object transaction
+ * @param float amount positive if depositing money or selling stock, negative if buying stock
  */
-function updateCashBalance(transaction) {
-  
-}
-
-function depositFunds() {
-  const depositAmount = parseFloat(
-    document.getElementById("deposit_amount").value
-  );
-  console.log("deposit amount is " + depositAmount);
+function updateCashBalance(amount) {
   const userId = firebase.auth().currentUser.uid;
   const status = document.getElementById("status");
   (async () => {
     const currentUser = await getCurrentUser();
-    // console.log('user is')
-    console.log("current user information is");
-      console.log(currentUser);
-      const balance = parseFloat(currentUser["balance"]) + depositAmount;
+      const balance = parseFloat(currentUser["balance"]) + amount;
       currentUser["balance"] = parseFloat(balance);
-      console.log("current user after deposit");
-      console.log(currentUser);
       var updates = {};
       updates[userId] = currentUser;
-      status.innerHTML = `Deposited $${depositAmount}! New balance is: $${balance}`;
+      status.innerHTML = `Updated balance by $${amount}! New balance is: $${balance.toFixed(2)}`;
       return db.ref("users").update(updates);
   })();
 }
+
+function depositFunds() {
+  resetAllHTMLDivs();
+  const status = document.getElementById("status");
+  const depositAmount = parseFloat(
+    document.getElementById("deposit_amount").value
+  );
+  console.log("deposit amount is " + depositAmount);
+  updateCashBalance(depositAmount)
+}
+
+/**
+ * clear all HTML divs on every button click so previous data isn't still hanging around. call this at the beginning of all user facing functions
+ */
+function resetAllHTMLDivs() {
+  const buyAndSell = document.getElementById("buy_sell_result");
+  const status = document.getElementById("status");
+  buyAndSell.innerHTML = '';
+  status.innerHTML = '';
+}
+
+
