@@ -25,11 +25,17 @@ function addNewUser() {
   const users = db.ref("users");
   const userId = firebaseUser.uid;
   const balance = 0;
+  var transactions = [{
+    symbol: "",
+    purchase_date: new Date().getTime(),
+    num_shares: 0,
+    price: 0, 
+  }];
 
   // write to db
   users
     .child(userId)
-    .set({ email, name, balance, transactions: [] })
+    .set({ email, name, balance, transactions})
     .then(function () {
       console.log(`successfully added new user to DB: ${email}`);
       status.innerHTML = "Wrote to DB!";
@@ -90,11 +96,11 @@ function purchaseStock() {
     const currentPrice = stockQuoteInfo.c;
     const currentUser = await getCurrentUser();
     // console.log('user is')
-    // console.log(currentUser)
-    currentUser["transactions"].push({
+    console.log(currentPrice)
+    currentUser.transactions.push({
       symbol: stock,
       purchase_date: new Date().getTime(),
-      "number of shares": numShares,
+      num_shares: numShares,
       price: currentPrice, // get this info from finnhub
     });
     console.log("current user after stock purchase");
