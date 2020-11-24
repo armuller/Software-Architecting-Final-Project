@@ -16,9 +16,14 @@
   },
   "homepage": "https://github.com/armuller/Software-Architecting-Final-Project#readme",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.1",
+    "bootstrap": "^4.5.3",
     "chart.js": "^2.9.4",
+    "datatables.net-bs4": "^1.10.22",
     "express": "^4.17.1",
     "finnhub": "^1.2.1",
+    "jquery": "^3.5.1",
+    "jquery.easing": "^1.4.1",
     "node": "^15.0.1",
     "require": "^2.4.20",
     "superagent": "^6.1.0",
@@ -27,7 +32,18 @@
     "websocket": "^1.0.32"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.1"
+    "@babel/cli": "^7.12.1",
+    "browser-sync": "2.26.13",
+    "del": "6.0.0",
+    "gulp": "4.0.2",
+    "gulp-autoprefixer": "7.0.1",
+    "gulp-clean-css": "4.3.0",
+    "gulp-header": "2.0.9",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rename": "2.0.0",
+    "gulp-sass": "4.1.0",
+    "gulp-uglify": "3.0.2",
+    "merge-stream": "2.0.0"
   },
   "description": ""
 }
