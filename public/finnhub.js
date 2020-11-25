@@ -32,7 +32,6 @@ function getStockQuote(quote = null) {
       .then(function (res) {
         console.log("Company Quote Acquired!");
         console.log(res.body);
-        //document.getElementById("stock_quote").innerHTML = JSON.stringify(res.body);
         document.getElementById("ticker").innerHTML = ticker;
         document.getElementById("open").innerHTML = "$" + round(res.body.o, 2);
         document.getElementById("current").innerHTML =
@@ -124,16 +123,8 @@ function timeConverter(UNIX_timestamp) {
     date + " " + month + " " + year;
   return time;
 }
-console.log(timeConverter(0));
 
 // Got this from stack overflow
 function round(value, decimals) {
   return Number(Math.round(value + "e" + decimals) + "e-" + decimals);
 }
-
-// stock quote
-// request(`https://finnhub.io/api/v1/quote?symbol=AAPL&token=${token}`, { json: true }, (err, res, body) => {
-//   if (err) { return console.log(err); }
-//   console.log('successfully received stock information')
-//   console.log(body);
-// });
