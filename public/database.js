@@ -124,7 +124,7 @@ function purchaseStock(isBuy) {
         updateCashBalance(-transCost)
         buySellResult.innerHTML = `
         <div class="alert alert-success" role="alert"> 
-          Purchased ${numShares} shares of ${stock}!
+          Purchased ${numShares} share(s) of ${stock}!
         </div>` 
 
         var updates = {};
@@ -200,7 +200,7 @@ function purchaseStock(isBuy) {
          updateCashBalance(transCost)
          buySellResult.innerHTML = `
          <div class="alert alert-success" role="alert">
-          Sold ${numShares} shares of ${stock}!
+          Sold ${numShares} share(s) of ${stock}!
         </div>
          `
         
