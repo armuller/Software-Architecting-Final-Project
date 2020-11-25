@@ -1,5 +1,5 @@
 
-(function(){
+// (function(){
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -26,7 +26,7 @@
 	const password = document.getElementById('password');
 	const login    = document.getElementById('login');
 	// const signup   = document.getElementById('signup');
-	const logout   = document.getElementById('logout');
+	// const logout   = document.getElementById('logout');
 
 	// const user = firebase.auth().currentUser;
 	// console.log('user is')
@@ -61,9 +61,7 @@
 	// 	});
 	// }
 	if(login) {
-		
-	}
-	login.addEventListener('click', e => {
+		login.addEventListener('click', e => {
 		const auth  = firebase.auth();		
 		const promise = auth.signInWithEmailAndPassword(email.value, password.value);
 		promise.catch(e => {
@@ -74,6 +72,8 @@
 			// </div>`
 		});
 	});
+
+	}
 
 	// signup
 	// signup.addEventListener('click', e => {
@@ -90,22 +90,22 @@
 	// });
 
 	// logout
-	if(logout) {
-		logout.addEventListener('click', e => {
-		console.log('clicked on log out!')
-		firebase.auth().signOut();
-		target.innerHTML = `
-			<div class="alert alert-success mt-3" role="alert">
-			Successfully logged out!
-		  </div>`
-	});
-	}
+	// if(logout) {
+	// 	logout.addEventListener('click', e => {
+	// 	console.log('clicked on log out!')
+	// 	firebase.auth().signOut();
+	// 	target.innerHTML = `
+	// 		<div class="alert alert-success mt-3" role="alert">
+	// 		Successfully logged out!
+	// 	  </div>`
+	// });
+	// }
 	
 
 
     // login state
 	firebase.auth().onAuthStateChanged(firebaseUser => {
-		console.log('in on auth state changed')
+		console.log('in login on auth state changed')
 		if(firebaseUser){
 			console.log('firebase user is: ')
 			console.log(firebaseUser);
@@ -121,22 +121,16 @@
 					addNewUser()
 				}
 			})
-			// logout.style.display = 'inline';
-			// login.style.display  = 'none';
-			// signup.style.display = 'none';
-		// 	target.innerHTML = `
-		// 	<div class="alert alert-success mt-3" role="alert">
-		// 	Successfully logged in! Welcome, ${firebaseUser.email}
-		//   </div>`
-		window.location.href = '/index.html'
+			if (window.location.pathname == '/login.html') {
+				window.location.href = '/index.html'
+			}
 		}
 		else{
 			console.log('User is not logged in');
-			logout.style.display = 'none';			
-			login.style.display  = 'inline';
-			signup.style.display = 'inline';
-			window.location.href = '/login.html'
+			if (window.location.pathname != '/login.html') {
+				window.location.href = '/login.html'
+			}
 		}
 	});
 
-}());
+// }());
