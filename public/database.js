@@ -88,7 +88,7 @@ function purchaseStock(isBuy) {
   const userId = firebase.auth().currentUser.uid;
   const status = document.getElementById("status");
   const butSellResult = document.getElementById("buy_sell_result")
-  const stock = document.getElementById("stock_ticker").value;
+  const stock = document.getElementById("company").value;
   const numShares = parseInt(document.getElementById("num_shares").value);
 
   (async () => {
