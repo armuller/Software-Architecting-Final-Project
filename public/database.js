@@ -66,7 +66,7 @@ function getCurrentUser() {
     db.ref("/users/" + userId)
       .once("value")
       .then(function (snapshot) {
-        console.log(snapshot.val());
+        // console.log(snapshot.val());
         results = snapshot.val();
         // var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
         // ...
@@ -84,15 +84,19 @@ function getCurrentUser() {
 // todo: transactions needs to be a list we continuously append to, not an object that keeps replacing itself
 function purchaseStock(isBuy) {
   resetAllHTMLDivs();
-  console.log('is buy is: ' + isBuy)
+  // console.log('is buy is: ' + isBuy)
   const userId = firebase.auth().currentUser.uid;
   const status = document.getElementById("status");
-  const butSellResult = document.getElementById("buy_sell_result")
-  const stock = document.getElementById("company").value;
+  const buySellResult = document.getElementById("buy_sell_result")
+  const stock = document.getElementById("company").value.toUpperCase();
   const numShares = parseInt(document.getElementById("num_shares").value);
+  console.log('buy sell result is');
+  console.log(buySellResult);
 
   (async () => {
+    console.log('getting stock data')
     const stockQuoteInfo = await getStockQuote(stock);
+    console.log('stock is ' + stock)
     // const currentPrice = getStockQuote(stock)
     console.log("stock quote info is:");
     console.log(stockQuoteInfo);
@@ -115,31 +119,102 @@ function purchaseStock(isBuy) {
           num_shares: numShares,
           price: currentPrice // get this info from finnhub
         });
-        console.log("current user after stock purchase");
-        console.log(currentUser);
 
         // update balance
         updateCashBalance(-transCost)
+        buySellResult.innerHTML = `
+        <div class="alert alert-success" role="alert"> 
+          Purchased ${numShares} shares of ${stock}!
+        </div>` 
 
         var updates = {};
         updates[userId] = currentUser;
-        butSellResult.innerHTML = `Purchased ${numShares} shares of ${stock}!`
-          // numShares > 0
-            // ? `Purchased ${numShares} shares of ${stock}!`
-            // : `Sold ${numShares} shares of ${stock}!`;
+        console.log('updates is')
+        console.log(updates)
+
         return db.ref("users").update(updates);
       } else {
         console.log("error, insufficient balance");
         status.innerHTML =
-          'Error, insufficient balance to make this purchase'
+          `<div class="alert alert-warning mt-3" role="alert">
+            Error, insufficient balance to make this purchase
+          </div>`
       }
     } else {
       // selling stocks
       // check if we have enough shares of the stock to sell (perhaps by calling getUserPortfolio first)
       // if so, add the transactions indicating the sell and update the cash balance
       // otherwise, show an error
-    }
+      console.log('selling stock')
+      // get user portfolio
+      const transactions = currentUser.transactions;
+      var transaction_length = transactions.length;
+      var n = 0;
+      var portfolio = {}
 
+      for (n =0; n < transaction_length; n++){
+         if (transactions[n].symbol in portfolio){
+          var quantity = transactions[n].num_shares
+          var cost = transactions[n].price*quantity
+          portfolio[transactions[n].symbol].quantity += quantity
+          portfolio[transactions[n].symbol].cost_basis += cost
+         } else {
+          if (transactions[n].symbol != ""){
+            const ticker = transactions[n].symbol
+            var quantity = transactions[n].num_shares
+            var cost = transactions[n].price*quantity
+            portfolio[ticker] = {
+                quantity: quantity,
+                cost_basis: cost,
+                current_value: 0,
+                gain: 0,
+                return: 0
+            };
+          };
+        };
+      };
+      for ( stock_symbol in portfolio){
+        const stockQuoteInfo = await getStockQuote(stock_symbol);
+        var curr_price = stockQuoteInfo.c;
+        portfolio[stock_symbol].current_value = curr_price * portfolio[stock_symbol].quantity
+        portfolio[stock_symbol].gain = portfolio[stock_symbol].current_value - portfolio[stock_symbol].cost_basis
+        portfolio[stock_symbol].return = portfolio[stock_symbol].gain/portfolio[stock_symbol].cost_basis
+      }
+      console.log('user portfolio')
+      console.log(portfolio)
+      // if user owns the stock and has enough shares to sell, allow them to sell it
+      let userOwnedQuantity = 0
+      if (stock in portfolio && portfolio[stock].quantity > 0) {
+        userOwnedQuantity = portfolio[stock].quantity
+      }
+      if (userOwnedQuantity - numShares >= 0) {
+        console.log('stock is in user portfolio')
+        currentUser.transactions.push({
+          symbol: stock,
+          purchase_date: new Date().getTime(),
+          num_shares: -numShares,
+          price: currentPrice // get this info from finnhub
+        });
+
+         // update balance
+         updateCashBalance(transCost)
+         buySellResult.innerHTML = `
+         <div class="alert alert-success" role="alert">
+          Sold ${numShares} shares of ${stock}!
+        </div>
+         `
+        
+        var updates = {};
+        updates[userId] = currentUser;
+        return db.ref("users").update(updates);
+      } else {
+        console.log("error, user trying to sell " + numShares + " shares of " + stock + " but does not own enough shares to sell");
+        status.innerHTML =
+          	`<div class="alert alert-warning mt-3" role="alert">
+				Failed to sell ${numShares} shares of ${stock}. You have ${userOwnedQuantity} shares to sell
+			</div>`
+      }
+    }
   })();
 }
 
@@ -154,24 +229,17 @@ function getUserPortfolio() {
   (async () => {
     const currentUser = await getCurrentUser();
     const transactions = currentUser.transactions;
-    console.log('user is')
-    console.log(currentUser)
-    console.log(transactions)
 
     // loop through and aggregate data on stocks user owns, # of shares, cost basis, unrealized gains/ losses, % gain/ loss
     var transaction_length = transactions.length;
     var n = 0;
     var portfolio = {}
     for (n =0; n < transaction_length; n++){
-      console.log(transactions[n])
-      console.log(transactions[n].symbol)
-      console.log(transactions[n].symbol in portfolio)
        if (transactions[n].symbol in portfolio){
         var quantity = transactions[n].num_shares
         var cost = transactions[n].price*quantity
         portfolio[transactions[n].symbol].quantity += quantity
         portfolio[transactions[n].symbol].cost_basis += cost
-        console.log(portfolio)
        } else {
         if (transactions[n].symbol != ""){
           const ticker = transactions[n].symbol
@@ -184,25 +252,19 @@ function getUserPortfolio() {
               gain: 0,
               return: 0
           };
-          console.log(portfolio)
         };
       };
     };
-    for (var stock in portfolio){
-      console.log(stock);
-      console.log(portfolio[stock]);
 
+    for (var stock in portfolio){
       const stockQuoteInfo = await getStockQuote(stock);
       var curr_price = stockQuoteInfo.c;
       portfolio[stock].current_value = curr_price * portfolio[stock].quantity
       portfolio[stock].gain = portfolio[stock].current_value - portfolio[stock].cost_basis
       portfolio[stock].return = portfolio[stock].gain/portfolio[stock].cost_basis
-
-      console.log(portfolio[stock]);
     }
     return portfolio;
   })();
-  
   // auto-refresh the user account table after the account is made
 };
 
@@ -220,7 +282,11 @@ function updateCashBalance(amount) {
       currentUser["balance"] = parseFloat(balance);
       var updates = {};
       updates[userId] = currentUser;
-      status.innerHTML = `Updated balance by $${amount}! New balance is: $${balance.toFixed(2)}`;
+      status.innerHTML = `
+      <div class="alert alert-success" role="alert">
+        Updated balance by $${amount}! New balance is: $${balance.toFixed(2)}
+      </div>
+      `;
       return db.ref("users").update(updates);
   })();
 }
