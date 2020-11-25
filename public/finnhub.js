@@ -11,7 +11,7 @@ function getCompanyNews() {
       document.getElementById("target").innerHTML =
         "Acquiring Company News Failed!";
     } else {
-      console.log("Company News Acquired!");
+      // console.log("Company News Acquired!");
       document.getElementById("target").innerHTML = JSON.stringify(res.body);
     }
   });
@@ -26,12 +26,12 @@ function getStockQuote(quote = null) {
   var url = "/stockquote/" + ticker;
 
   return new Promise((resolve, reject) => {
-    console.log("making super agent call");
+    // console.log("making super agent call");
     superagent
       .get(url)
       .then(function (res) {
-        console.log("Company Quote Acquired!");
-        console.log(res.body);
+        // console.log("Company Quote Acquired!");
+        // console.log(res.body);
         document.getElementById("company").innerHTML = ticker;
         document.getElementById("open").innerHTML = "$" + round(res.body.o, 2);
         document.getElementById("current").innerHTML ="$" + round(res.body.c, 2);
@@ -59,14 +59,14 @@ function getCandleStick() {
       document.getElementById("stock_graph_canvas").innerHTML =
         "Acquiring CandleStick Failed!";
     } else {
-      console.log("Company Candle Stick Acquired!");
+      // console.log("Company Candle Stick Acquired!");
 
       var i;
       var time = [];
       for (i = 0; i < res.body.t.length; i++) {
         time.push(timeConverter(res.body.t[i]));
       }
-      console.log(time);
+      // console.log(time);
       var myLineChart2 = new Chart(
         document.getElementById("stock_graph_canvas"),
         {
