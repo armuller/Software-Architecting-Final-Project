@@ -58,7 +58,8 @@ function getAllUsers() {
 
 function getCurrentUser() {
   resetAllHTMLDivs();
-  const userId = firebase.auth().currentUser.uid;
+  const user = firebase.auth().currentUser;
+  const userId = user.uid;
   let results = null;
   const status = document.getElementById("status");
   return new Promise((resolve, reject) => {
