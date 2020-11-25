@@ -30,9 +30,7 @@ function getStockQuote(quote = null) {
     superagent
       .get(url)
       .then(function (res) {
-        // console.log("Company Quote Acquired!");
-        // console.log(res.body);
-        document.getElementById("company").innerHTML = ticker;
+        document.getElementById("ticker").innerHTML = ticker;
         document.getElementById("open").innerHTML = "$" + round(res.body.o, 2);
         document.getElementById("current").innerHTML ="$" + round(res.body.c, 2);
         return res.body;
@@ -77,13 +75,22 @@ function getCandleStick() {
               {
                 label: ticker + " Stock Price",
                 data: res.body.c,
-                fill: false,
-                borderColor: "rgb(75, 192, 192)",
-                lineTension: 0.1,
+                backgroundColor: "rgba(78, 115, 223, 0.05)",
+                borderColor: "rgba(78, 115, 223, 1)",
+                pointRadius: 3,
+                pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                pointBorderColor: "rgba(78, 115, 223, 1)",
+                pointHoverRadius: 3,
+                pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                pointHitRadius: 10,
+                pointBorderWidth: 2,
               },
             ],
           },
-          options: {},
+          options: {
+            maintainAspectRatio: false,
+            },
         }
       );
     }
@@ -126,4 +133,10 @@ function timeConverter(UNIX_timestamp) {
 // Got this from stack overflow
 function round(value, decimals) {
   return Number(Math.round(value + "e" + decimals) + "e-" + decimals);
+}
+
+// Combined Function onClick
+function getmuhstuff() {
+  getStockQuote();
+  getCandleStick();
 }
