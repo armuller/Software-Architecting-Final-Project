@@ -26,12 +26,7 @@ function addNewUser() {
   const users = db.ref("users");
   const userId = firebaseUser.uid;
   const balance = 0;
-  var transactions = [{
-    symbol: "",
-    purchase_date: new Date().getTime(),
-    num_shares: 0,
-    price: 0
-  }];
+  var transactions = [];
 
   // write to db
   users
