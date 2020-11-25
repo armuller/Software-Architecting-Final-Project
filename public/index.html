@@ -1,24 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html lang="en">
-
+ 
 <head>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+  
+  <!-- Superagent -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.8.3/superagent.min.js"></script>
+  
+  <!-- Boostrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+  https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+  
+  <link rel="stylesheet" href="styles.css">
 
-    <title>LGO Capital</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <!-- Chart JS-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
 </head>
 
@@ -50,7 +56,6 @@
     <br>
     <button id="read_users_from_db" class="btn btn-primary" onclick="getAllUsers()">Get all users from DB</button>
     <button id="get_current_user_from_db" class="btn btn-primary" onclick="getCurrentUser()">Get current user from DB</button>
-    <button id="get_user_portfolio_from_db" class="btn btn-primary" onclick="getUserPortfolio()">Get portfolio from DB</button>
     <div class="input-group mb-3 mt-3" style="max-width: 50rem;">
       <input id="stock_ticker" type="text" class="form-control" aria-label="Stock Ticker" placeholder="stock symbol">
       <input id="num_shares" type="text" class="form-control ml-2" aria-label="Number of shares" placeholder="number of shares (positive number to buy and negative number to sell)">
@@ -58,51 +63,69 @@
       <button id="sell_stock" class="btn btn-primary ml-3" onclick="purchaseStock(false)">Sell stock</button>
     </div>
 
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
+    <div class="input-group mb-3 mt-3" style="max-width: 20rem;">
+      <div class="input-group-prepend">
+        <span class="input-group-text">$</span>
+      </div>
+      <input id="deposit_amount" type="text" class="form-control" aria-label="Deposit Amount">
+      <button id="deposit_funds" class="btn btn-primary ml-3" onclick="depositFunds()">Deposit Funds</button>
     </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <div id="buy_sell_result"></div>
+    <div id="status"></div>
+  </div>
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <div id="Buy/Sell" class="tabcontent">
+    <input id="company" type="company" placeholder="Company Symbol" style="position:absolute; top:100px; left:30px;"><br>
+    <button id="stockquote" class="btn btn-primary" onclick="buyAndSell()" style="position:absolute; top:150px; left:30px;">Get Stock Quote</button>
+    <div id = "stock_graph" style="position:absolute; top:200px; left:100px; width:50%; height:50%;">
+      <canvas id="stock_graph_canvas" class="ml-5"></canvas>
+    </div>
+    <div id = "stock_quote" style="position:absolute; top:200px; left:30px;">
+      <table width = "100" border="1">
+        <tr>
+          <td>Stock</td>
+          <td id="ticker"></td>
+        </tr>
+        <tr>
+          <td>Opening Price</td>
+          <td id="open">    </td>
+        </tr>
+        <tr>
+          <td>Current Price</td>
+          <td id="current">    </td>
+        </tr>
+      </table>
+    </div> 
+  </div>
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+  <div id="Social" class="tabcontent">
+    <input id="friends" placeholder="Input Friends Email"><br>
+    <button id="friends" class="btn btn-primary" onclick="getStockQuote()">See Friend's Performance</button>
+    <div id="Social target"></div>
+  </div>
 
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+  <div id="Transactions" class="tabcontent">
+    <button id="transactions" class="btn btn-primary" onclick="">Get past transaction data</button>
+    <div id="Transactions target"></div>
+  </div>
 
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+  <div id="target"></div>
+
 
 </body>
+
+<!-- Import Source Scripts-->
+<script src="login.js"></script>
+<script src='finnhub.js'></script>
+<script src='tabs.js'></script>
+<script src='database.js'></script>
+<!-- Test Trading Vue -->  
+<!-- <script src="trading-vue.min.js"></script> -->
+
+<script>
+// Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click();
+</script>
 
 </html>
