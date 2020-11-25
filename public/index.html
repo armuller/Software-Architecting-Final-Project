@@ -11,6 +11,21 @@
 
     <title>LGO Capital</title>
 
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+
+    <!-- Superagent -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.8.3/superagent.min.js"></script>
+  
+    <!-- Boostrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -66,7 +81,7 @@
 
             <!-- Nav Item - Buy/Sell Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#">
+                <a class="nav-link" href="trade.html">
                     <i class="fas fa-hand-holding-usd"></i>
                     <span>Buy/Sell</span>
                 </a>
@@ -573,7 +588,9 @@
 
                         </div>
                     </div>
-
+                    <!-- "status" and "buy_sell_result" to be removed after code cleanup is complete and we no longer get errors -->
+                    <div id="status"></div>
+                    <div id="buy_sell_result"></div>
                 </div>
                 <!-- /.container-fluid -->
 
@@ -584,7 +601,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; LGO Capital 2020</span>
                     </div>
                 </div>
             </footer>
@@ -615,7 +632,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="login.html" id="logout">Logout</a>
                 </div>
             </div>
         </div>
@@ -630,6 +647,10 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+    <script src='tabs.js'></script>
+    <script src="login.js"></script>
+    <script src='finnhub.js'></script>
+    <script src='database.js'></script>
 
     <!-- Page level plugins -->
     <script src="vendor/chart.js/Chart.min.js"></script>
@@ -639,5 +660,6 @@
     <script src="js/demo/chart-pie-demo.js"></script>
 
 </body>
+
 
 </html>
