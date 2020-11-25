@@ -32,10 +32,9 @@ function getStockQuote(quote = null) {
       .then(function (res) {
         console.log("Company Quote Acquired!");
         console.log(res.body);
-        document.getElementById("ticker").innerHTML = ticker;
+        document.getElementById("company").innerHTML = ticker;
         document.getElementById("open").innerHTML = "$" + round(res.body.o, 2);
-        document.getElementById("current").innerHTML =
-          "$" + round(res.body.c, 2);
+        document.getElementById("current").innerHTML ="$" + round(res.body.c, 2);
         return res.body;
       })
       .catch((err) => {
