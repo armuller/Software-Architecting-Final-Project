@@ -200,6 +200,7 @@ function getUserPortfolio() {
 
       console.log(portfolio[stock]);
     }
+    return portfolio;
   })();
   
   // auto-refresh the user account table after the account is made
