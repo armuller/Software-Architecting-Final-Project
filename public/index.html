@@ -22,6 +22,7 @@
 
 </head>
 
+<<<<<<< HEAD
 <body id="page-top">
 
     <!-- Page Wrapper -->
@@ -592,6 +593,43 @@
 
         </div>
         <!-- End of Content Wrapper -->
+=======
+<body>
+  <!-- Set up Tabs -->
+  <button class="tablink" onclick="openPage('Home', this, 'lightblue')" id="defaultOpen">Home</button>
+  <button class="tablink" onclick="openPage('Account Overview', this, 'lightblue')" id="defaultOpen">Account Overview</button>
+  <button class="tablink" onclick="openPage('Buy/Sell', this, 'lightblue')">Buy/Sell</button>
+  <button class="tablink" onclick="openPage('Social', this, 'lightblue')">Social</button>
+  <button class="tablink" onclick="openPage('Transactions', this, 'lightblue')">Transactions</button>
+
+  <div id="Home" class="tabcontent">
+    <h3>Home</h3>
+    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+      <div class="card-header">Create Account</div>
+      <input id="email" type="email" placeholder="Email" class="ml-2 mr-2"><br>
+      <input id="password" type="password" placeholder="Password" class="ml-2 mr-2"><br>
+    </div>
+    <button id="login" class="btn btn-primary">Login</button>
+    <button id="signup" class="btn btn-primary">SignUp</button>
+    <button id="logout" class="btn btn-primary" style="display:none;">Logout</button>
+    <div id="home_target"></div>
+  </div>
+
+  <div id="Account Overview" class="tabcontent">
+    <h3>Your Stonks are Impressive</h3>
+    <h3>*** Placeholder for Account Table ***</h3>
+    <div id="Account overview target"></div>
+    <br>
+    <button id="read_users_from_db" class="btn btn-primary" onclick="getAllUsers()">Get all users from DB</button>
+    <button id="get_current_user_from_db" class="btn btn-primary" onclick="getCurrentUser()">Get current user from DB</button>
+    <button id="get_user_portfolio_from_db" class="btn btn-primary" onclick="getUserPortfolio()">Get portfolio from DB</button>
+    <div class="input-group mb-3 mt-3" style="max-width: 50rem;">
+      <input id="stock_ticker" type="text" class="form-control" aria-label="Stock Ticker" placeholder="stock symbol">
+      <input id="num_shares" type="text" class="form-control ml-2" aria-label="Number of shares" placeholder="number of shares (positive number to buy and negative number to sell)">
+      <button id="purchase_stock" class="btn btn-primary ml-3" onclick="purchaseStock(true)">Buy stock</button>
+      <button id="sell_stock" class="btn btn-primary ml-3" onclick="purchaseStock(false)">Sell stock</button>
+    </div>
+>>>>>>> master
 
     </div>
     <!-- End of Page Wrapper -->

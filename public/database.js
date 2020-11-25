@@ -112,7 +112,7 @@ function purchaseStock(isBuy) {
           symbol: stock,
           purchase_date: new Date().getTime(),
           num_shares: numShares,
-          price: currentPrice, // get this info from finnhub
+          price: currentPrice // get this info from finnhub
         });
         console.log("current user after stock purchase");
         console.log(currentUser);
@@ -150,11 +150,59 @@ function purchaseStock(isBuy) {
  */
 function getUserPortfolio() {
   // get all of user's transactions
-  // loop through and aggregate data on stocks user owns, # of shares, cost basis, unrealized gains/ losses, % gain/ loss
+  (async () => {
+    const currentUser = await getCurrentUser();
+    const transactions = currentUser.transactions;
+    console.log('user is')
+    console.log(currentUser)
+    console.log(transactions)
+
+    // loop through and aggregate data on stocks user owns, # of shares, cost basis, unrealized gains/ losses, % gain/ loss
+    var transaction_length = transactions.length;
+    var n = 0;
+    var portfolio = {}
+    for (n =0; n < transaction_length; n++){
+      console.log(transactions[n])
+      console.log(transactions[n].symbol)
+      console.log(transactions[n].symbol in portfolio)
+       if (transactions[n].symbol in portfolio){
+        var quantity = transactions[n].num_shares
+        var cost = transactions[n].price*quantity
+        portfolio[transactions[n].symbol].quantity += quantity
+        portfolio[transactions[n].symbol].cost_basis += cost
+        console.log(portfolio)
+       } else {
+        if (transactions[n].symbol != ""){
+          const ticker = transactions[n].symbol
+          var quantity = transactions[n].num_shares
+          var cost = transactions[n].price*quantity
+          portfolio[ticker] = {
+              quantity: quantity,
+              cost_basis: cost,
+              current_value: 0,
+              gain: 0,
+              return: 0
+          };
+          console.log(portfolio)
+        };
+      };
+    };
+    for (var stock in portfolio){
+      console.log(stock);
+      console.log(portfolio[stock]);
+
+      const stockQuoteInfo = await getStockQuote(stock);
+      var curr_price = stockQuoteInfo.c;
+      portfolio[stock].current_value = curr_price * portfolio[stock].quantity
+      portfolio[stock].gain = portfolio[stock].current_value - portfolio[stock].cost_basis
+      portfolio[stock].return = portfolio[stock].gain/portfolio[stock].cost_basis
+
+      console.log(portfolio[stock]);
+    }
+  })();
+  
   // auto-refresh the user account table after the account is made
-  // cost basis from weighted average of the purchase history
-  // unrealized gains & losses we need to ping finnhub for current price
-}
+};
 
 /**
  * Given an amount to update the balance by, update the user's cash balance
