@@ -117,6 +117,10 @@
 				if (snapshot.exists()) {
 					console.log('account exists!')
 					console.log(snapshot.val());
+					var accountBalance = document.getElementById('accountBalance');
+					if (accountBalance) {
+						accountBalance.innerHTML = `$${(snapshot.val().balance).toFixed(2)}`;
+					}
 				} else {
 					console.log('account does not exist yet')
 					console.log(userId)

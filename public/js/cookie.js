@@ -15,5 +15,6 @@ function getCookie(cname) {
     return "";
   }
 
+
 var displayName = document.getElementById('displayName');
 displayName.innerHTML = getCookie('displayName');
