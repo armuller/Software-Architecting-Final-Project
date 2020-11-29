@@ -21,10 +21,13 @@ if (!firebase.apps.length) {
 const logout = document.getElementById("logout");
 
 // logout
-logout.addEventListener("click", (e) => {
-  console.log("clicked on log out!");
-  firebase.auth().signOut();
-});
+if (logout) {
+    logout.addEventListener("click", (e) => {
+    console.log("clicked on log out!");
+    firebase.auth().signOut();
+    });
+}
+
 
 // login state
 firebase.auth().onAuthStateChanged((firebaseUser) => {
@@ -48,7 +51,12 @@ firebase.auth().onAuthStateChanged((firebaseUser) => {
         }
       });
   } else {
-    console.log("User is not logged in");
-    window.location.href = "/login.html";
+    console.log('User is not logged in');
+    if (
+        window.location.pathname != "/login.html" &&
+        window.location.pathname != "/register.html"
+      ) {
+        window.location.href = "/login.html";
+      }
   }
 });
