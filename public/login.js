@@ -13,7 +13,7 @@
         appId: "1:321737945642:web:2c3800f0ff3bb40841c953",
         measurementId: "G-Q52M7VL8WN"
 	};
-	// const target = document.getElementById('home_target');
+	const target = document.getElementById('login_target');
 
     // Initialize Firebase
     if (!firebase.apps.length) {
@@ -66,10 +66,10 @@
 		const promise = auth.signInWithEmailAndPassword(email.value, password.value);
 		promise.catch(e => {
 			console.log(e.message)
-			// target.innerHTML = `
-			// 	<div class="alert alert-warning mt-3" role="alert">
-			// 	Failed to log in. Account does not exist or email and password is incorrect. Please sign up for an account or double check your email and password is correct
-			// </div>`
+			target.innerHTML = `
+				<div class="alert alert-warning mt-3" role="alert">
+				Failed to log in. Account does not exist or email and password is incorrect. Please sign up for an account or double check your email and password is correct
+			</div>`
 		});
 	});
 
@@ -106,9 +106,12 @@
     // login state
 	firebase.auth().onAuthStateChanged(firebaseUser => {
 		console.log('in login on auth state changed')
+		console.log('currently at ' + window.location.pathname)
 		if(firebaseUser){
 			console.log('firebase user is: ')
 			console.log(firebaseUser);
+			
+			document.cookie = `displayName:${firebaseUser.displayName}`
 			const userId = firebaseUser.uid;
 			firebase.database().ref('/users/' + userId).once('value', snapshot => {
 				if (snapshot.exists()) {
@@ -127,9 +130,12 @@
 		}
 		else{
 			console.log('User is not logged in');
-			if (window.location.pathname != '/login.html') {
-				window.location.href = '/login.html'
-			}
+			if (
+				window.location.pathname != "/login.html" &&
+				window.location.pathname != "/register.html"
+			  ) {
+				window.location.href = "/login.html";
+			  }
 		}
 	});
 
