@@ -22,11 +22,16 @@ function addNewUser() {
   const firebaseUser = firebase.auth().currentUser;
   console.log("current user is: " + firebaseUser);
   const email = firebaseUser.email;
-  const name = email.substring(0, email.indexOf("@")); // todo: can probably update to ask for the user's name, but for now just take whatever is in front of '@'
+  const name = firebaseUser.displayName;
   const users = db.ref("users");
   const userId = firebaseUser.uid;
   const balance = 0;
-  var transactions = [];
+  var transactions = [{
+    'num_shares': 0,
+    'price': 0,
+    'purchase_date': new Date().getTime(),
+    'symbol': ''
+  }];
 
   // write to db
   users
@@ -307,8 +312,10 @@ function depositFunds() {
 function resetAllHTMLDivs() {
   const buyAndSell = document.getElementById("buy_sell_result");
   const status = document.getElementById("status");
-  buyAndSell.innerHTML = '';
-  status.innerHTML = '';
+  if (buyAndSell && status) {
+    buyAndSell.innerHTML = '';
+    status.innerHTML = '';
+  }
 }
 
 
