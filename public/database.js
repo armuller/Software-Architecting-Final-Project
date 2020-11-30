@@ -368,3 +368,25 @@ function getFriendsPerformance() {
   const firebaseuser= firebase.auth().getUserByEmail(friendemail);
   console.log(firebaseuser.balance);
 }
+
+function getFriendData() {
+  const status = document.getElementById("friend_email").value;
+  const display = document.getElementById("friend");
+  return db
+    .ref("/users/")
+    .once("value")
+    .then(function (snapshot) {
+      var something = snapshot.val();
+      console.log(something);
+      for (i in something) {
+        console.log(something[i].email)
+        if (something[i].email == status) {
+          var balance = something[i].balance;
+          console.log(balance);
+          display.innerHTML = `<div class="alert alert-warning mt-3" role="alert">
+          Your Friend's Balance is: $${balance}
+        </div>`
+        };
+    };
+  });
+}
