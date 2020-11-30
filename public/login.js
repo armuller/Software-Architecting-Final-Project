@@ -114,14 +114,22 @@
 			document.cookie = `displayName:${firebaseUser.displayName}`
 			const userId = firebaseUser.uid;
 			firebase.database().ref('/users/' + userId).once('value', snapshot => {
+				var accountBalance = document.getElementById('accountBalance');
 				if (snapshot.exists()) {
 					console.log('account exists!')
 					console.log(snapshot.val());
+
+					if (accountBalance) {
+						accountBalance.innerHTML = `$${(snapshot.val().balance).toFixed(2)}`;
+					}
 				} else {
 					console.log('account does not exist yet')
 					console.log(userId)
 					// add new user to DB if the user does not exist yet
 					addNewUser()
+					if (accountBalance) {
+						accountBalance.innerHTML = `$0`;
+					}
 				}
 			})
 			if (window.location.pathname == '/login.html') {

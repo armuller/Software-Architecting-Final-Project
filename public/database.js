@@ -326,4 +326,45 @@ function resetAllHTMLDivs() {
   }
 }
 
+function getTransactions() {
+  (async () => {
+    const currentUser = await getCurrentUser();
+    const transactions = currentUser.transactions;
+    console.log(transactions);
+    if (transactions) {
+      let resultsDiv = document.getElementById("transactions");
+      resultsString = ''
+    resultsString = `
+        <table class="table">
+          <thead>
+            <tr>`;
+      let tableHeaders = Object.keys(transactions[0]);
+      let tableHeaders2 = ["Number of Shares Purchased", "Purchase Price ($)", "Purchase Date/Time (UNIX)", "Stock Ticker"];
+      for (let i = 0; i < tableHeaders2.length; i++) {
+        resultsString += `<th scope="col">${tableHeaders2[i]}</th>`
+      }
+      resultsString += `</tr>
+      </thead>
+      <tbody>
+      `;
+      for (let i = 0; i < transactions.length; i++) {
+        resultsString  += `<tr>`;
+        for (let j = 0; j < tableHeaders.length; j++) {
+          let currentHeader = tableHeaders[j]
+          resultsString += `<td>${transactions[i][currentHeader]}</td>`
+        }
+        resultsString += `</tr>`
+        
+      }
+      resultsString += `</tbody></table>`
+      resultsDiv.innerHTML = resultsString;
+    }
+    return transactions;
+  })();
+}
 
+function getFriendsPerformance() {
+  const friendemail = document.getElementById("friend_email");
+  const firebaseuser= firebase.auth().getUserByEmail(friendemail);
+  console.log(firebaseuser.balance);
+}

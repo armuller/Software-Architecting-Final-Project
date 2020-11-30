@@ -1,5 +1,4 @@
 function getCookie(cname) {
-    console.log('in get cookie')
     var name = cname + ":";
     var decodedCookie = decodeURIComponent(document.cookie);
     var ca = decodedCookie.split(';');
@@ -15,6 +14,7 @@ function getCookie(cname) {
     }
     return "";
   }
+
 
 var displayName = document.getElementById('displayName');
 displayName.innerHTML = getCookie('displayName');
