@@ -229,9 +229,9 @@ function purchaseStock(isBuy) {
  *
  * @return JSON object containing information on stocks user owns, # of shares, cost basis, unrealized gains/ losses, % gain/ loss
  */
-function getUserPortfolio() {
+function getUserPortfolio(date = new Date().getTime()) {
   // get all of user's transactions
-  (async () => {
+  return (async () => {
     const currentUser = await getCurrentUser();
     const transactions = currentUser.transactions;
 
@@ -240,27 +240,35 @@ function getUserPortfolio() {
     var n = 0;
     var portfolio = {}
     for (n =0; n < transaction_length; n++){
-       if (transactions[n].symbol in portfolio){
-        var quantity = transactions[n].num_shares
-        var cost = transactions[n].price*quantity
-        portfolio[transactions[n].symbol].quantity += quantity
-        portfolio[transactions[n].symbol].cost_basis += cost
-       } else {
-        if (transactions[n].symbol != ""){
-          const ticker = transactions[n].symbol
+      if (transactions[n].purchase_date <= date) {  
+        if (transactions[n].symbol in portfolio){
           var quantity = transactions[n].num_shares
           var cost = transactions[n].price*quantity
-          portfolio[ticker] = {
-              quantity: quantity,
-              cost_basis: cost,
-              current_value: 0,
-              gain: 0,
-              return: 0
+          portfolio[transactions[n].symbol].quantity += quantity
+          portfolio[transactions[n].symbol].cost_basis += cost
+        } else {
+          if (transactions[n].symbol != ""){
+            const ticker = transactions[n].symbol
+            var quantity = transactions[n].num_shares
+            var cost = transactions[n].price*quantity
+            portfolio[ticker] = {
+                quantity: quantity,
+                cost_basis: cost,
+                current_value: 0,
+                gain: 0,
+                return: 0
+            };
           };
         };
       };
     };
+    return portfolio;
+  })();
+  // auto-refresh the user account table after the account is made
+};
 
+function getCurrentPortfolioValue(portfolio = {}) {
+  return (async () => {
     for (var stock in portfolio){
       const stockQuoteInfo = await getStockQuote(stock);
       var curr_price = stockQuoteInfo.c;
@@ -269,9 +277,9 @@ function getUserPortfolio() {
       portfolio[stock].return = portfolio[stock].gain/portfolio[stock].cost_basis
     }
     return portfolio;
-  })();
-  // auto-refresh the user account table after the account is made
+  });
 };
+
 
 /**
  * Given an amount to update the balance by, update the user's cash balance
