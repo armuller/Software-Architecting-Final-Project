@@ -57,7 +57,7 @@ function getNetWorth(date = new Date().getTime()) {
     var n = 0;
     var portfolio = {}
     for (n =0; n < transaction_length; n++){
-      if (transactions[n].purchase_date <= date) {
+      if (transactions[n] && transactions[n].purchase_date <= date) {
         if (transactions[n].symbol in portfolio){
           var quantity = transactions[n].num_shares
           var cost = transactions[n].price*quantity
@@ -123,6 +123,9 @@ firebase.auth().onAuthStateChanged(function(user){
   if (user) {
     (async () => {
       const graph = await buildGraphData(startDate)
+      if (graph) {
+        hideSpinner();
+      }
       // Area Chart Example
       var ctx = document.getElementById("myAreaChart");
       var myLineChart = new Chart(ctx, {
@@ -217,5 +220,9 @@ firebase.auth().onAuthStateChanged(function(user){
   };
 });
 
-
+// Function to hide the Spinner
+function hideSpinner() {
+    document.getElementById('is_chart_loading')
+            .style.display = 'none';
+}
 
