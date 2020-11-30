@@ -110,14 +110,24 @@
 		if(firebaseUser){
 			console.log('firebase user is: ')
 			console.log(firebaseUser);
-			
-			document.cookie = `displayName:${firebaseUser.displayName}`
+			// set display name for legacy accounts
+			if (firebaseUser.displayName == null) {
+				firebaseUser.updateProfile({
+					displayName: `LGO Capital Test`
+				});
+			}
+			let displayName = firebaseUser.displayName ?? `LGO Capital Test`
+			// save the user's display name in cookies
+			document.cookie = `displayName:${displayName}`
+
 			const userId = firebaseUser.uid;
 			firebase.database().ref('/users/' + userId).once('value', snapshot => {
 				var accountBalance = document.getElementById('accountBalance');
+				var navAccountBalance = document.getElementById('navAccountBalance');
 				if (snapshot.exists()) {
 					console.log('account exists!')
 					console.log(snapshot.val());
+					navAccountBalance.innerHTML = `Account Balance: $${(snapshot.val().balance).toFixed(2)}`;
 
 					if (accountBalance) {
 						accountBalance.innerHTML = `$${(snapshot.val().balance).toFixed(2)}`;
@@ -127,6 +137,7 @@
 					console.log(userId)
 					// add new user to DB if the user does not exist yet
 					addNewUser()
+					navAccountBalance.innerHTML = `Account Balance: $0`
 					if (accountBalance) {
 						accountBalance.innerHTML = `$0`;
 					}

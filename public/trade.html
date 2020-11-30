@@ -153,7 +153,12 @@
                             </div>
                         </li>
 
-                        
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="navAccountBalance"></span>
+                            </a>
+                        </li>
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -188,7 +193,7 @@
                                     <div class="col mr-2">
                                         <div class="col-auto">    
                                         <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
-                                            Buy Stock
+                                            Trade Stock
                                             <input id="num_shares" type="text" class="form-control ml-2" aria-label="Number of shares" placeholder="number of shares (positive number to buy and negative number to sell)"></input>
                                             <button id="purchase_stock" class="btn btn-primary ml-3  mt-2" onclick="purchaseStock(true)">Buy stock</button>
                                             <button id="sell_stock" class="btn btn-primary ml-3  mt-2" onclick="purchaseStock(false)">Sell stock</button>
