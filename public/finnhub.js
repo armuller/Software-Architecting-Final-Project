@@ -32,7 +32,7 @@ function getStockQuote(quote = null) {
       .then(function (res) {
         console.log("Company Quote Acquired!");
         console.log(res.body);
-        document.getElementById("company").innerHTML = ticker;
+        document.getElementById("ticker").innerHTML = ticker;
         document.getElementById("open").innerHTML = "$" + round(res.body.o, 2);
         document.getElementById("current").innerHTML ="$" + round(res.body.c, 2);
         return res.body;
@@ -179,3 +179,67 @@ function timeConverter(UNIX_timestamp) {
 function round(value, decimals) {
   return Number(Math.round(value + "e" + decimals) + "e-" + decimals);
 }
+
+function getGraph(stock = null, date = null) {
+  var ticker;
+  if (stock != null) {
+    ticker = stock;
+  } else {
+    ticker = document.getElementById("company").value;
+  };
+  
+  var endDate = parseInt(new Date().getTime() / 1000);
+  if (date != null){
+    endDate = parseInt(date/1000);
+  };
+
+  var startDate = endDate - 30 * 24 * 60 * 60;
+
+  var url = "/candlestick/" + ticker + "/" + startDate + "/" + endDate;
+
+  return new Promise((resolve, reject) => {
+    superagent.get(url).end(function (err, res) {
+        if (err) {
+          console.log(err);
+          document.getElementById("stock_graph_canvas").innerHTML =
+            "Acquiring CandleStick Failed!";
+        } else {
+          console.log("Company Candle Stick Acquired!");
+
+          var i;
+          var time = [];
+          console.log(res.body);
+          for (i = 0; i < res.body.t.length; i++) {
+            time.push(timeConverter(res.body.t[i]));
+          }
+          console.log(time);
+          var myLineChart2 = new Chart(
+            document.getElementById("stock_graph_canvas"),
+            {
+              type: "line",
+              data: {
+                labels: time,
+                datasets: [
+                  {
+                    label: ticker + " Stock Price",
+                    data: res.body.c,
+                    fill: false,
+                    borderColor: "#4e73df",
+                    lineTension: 0.1,
+                  },
+                ],
+              },
+              options: {},
+            }
+          );
+          return res.body;
+        }
+      });
+    });
+}
+
+function getmuhstuff() {
+  getGraph();
+  getStockQuote();
+}
+
