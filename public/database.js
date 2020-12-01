@@ -447,7 +447,11 @@ function getTransactions() {
         }
         for (let j = 0; j < tableHeaders.length; j++) {
           let currentHeader = tableHeaders[j];
-          resultsString += `<td>${Math.abs(transactions[i][currentHeader])}</td>`;
+          let item = transactions[i][currentHeader]
+          if (!isNaN(item)) {
+            item = Math.abs(transactions[i][currentHeader])
+          }
+          resultsString += `<td>${item}</td>`;
         }
         resultsString += `</tr>`;
       }
