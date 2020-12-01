@@ -24,7 +24,6 @@ app.get('/companynews/:ticker/:startDate/:endDate', function (req, res) {
         else {
             console.log(data)
         }
-    console.log('Success');
     res.send(data);
     });
 });
@@ -41,7 +40,6 @@ app.get('/stockquote/:ticker', function (req, res) {
         else {
             console.log(data)
         }
-    console.log('Success');
     res.send(data);
     });
 });
@@ -64,7 +62,6 @@ app.get('/candlestick/:ticker/:startDate/:endDate', function (req, res) {
         else {
             console.log(data)
         }
-    console.log('Success');
     res.send(data);
     });
 });

@@ -20,7 +20,6 @@ function addNewUser() {
   const status = document.getElementById("status");
 
   const firebaseUser = firebase.auth().currentUser;
-  console.log("current user is: " + firebaseUser);
   const email = firebaseUser.email;
   const name = firebaseUser.displayName;
   const users = db.ref("users");
@@ -40,7 +39,6 @@ function addNewUser() {
     .child(userId)
     .set({ email, name, balance, transactions })
     .then(function () {
-      console.log(`successfully added new user to DB: ${email}`);
       status.innerHTML = "Wrote to DB!";
     })
     .catch(function (err) {
@@ -472,12 +470,9 @@ function getFriendData() {
     .once("value")
     .then(function (snapshot) {
       var something = snapshot.val();
-      console.log(something);
       for (i in something) {
-        console.log(something[i].email)
         if (something[i].email == status) {
           var balance = something[i].balance;
-          console.log(balance);
           display.innerHTML = `<div class="alert alert-success mt-3" role="alert">
           Your Friend's Balance is: $${balance.toFixed(2)}
         </div>`
@@ -492,8 +487,6 @@ function buildPortfolioTable() {
     const updatedPortfolio = await getCurrentPortfolioValue();
     let resultsDiv = document.getElementById("portfolio breakdown");
       if (Object.keys(updatedPortfolio).length !== 0) {
-        console.log('got updated portfolio')
-        console.log(updatedPortfolio)
         let resultsString = "";
         resultsString = `
           <table class="table">
