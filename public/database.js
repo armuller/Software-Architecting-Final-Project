@@ -280,20 +280,76 @@ function getUserPortfolio(date = new Date().getTime()) {
   // auto-refresh the user account table after the account is made
 }
 
-function getCurrentPortfolioValue(portfolio = {}) {
-  return async () => {
+
+function getCurrentPortfolioValue(date = new Date().getTime()) {
+  // get all of user's transactions
+  return (async () => {
+    const currentUser = await getCurrentUser();
+    const transactions = currentUser.transactions;
+
+    // loop through and aggregate data on stocks user owns, # of shares, cost basis, unrealized gains/ losses, % gain/ loss
+    var transaction_length = transactions.length;
+    var n = 0;
+    var portfolio = {};
+    for (n = 0; n < transaction_length; n++) {
+      if (transactions[n]) {
+        if (transactions[n].purchase_date <= date) {
+          if (transactions[n].symbol in portfolio) {
+            var quantity = transactions[n].num_shares;
+            var cost = transactions[n].price * quantity;
+            portfolio[transactions[n].symbol].quantity += quantity;
+            portfolio[transactions[n].symbol].cost_basis += cost;
+          } else {
+            if (transactions[n].symbol != "") {
+              const ticker = transactions[n].symbol;
+              var quantity = transactions[n].num_shares;
+              var cost = transactions[n].price * quantity;
+              portfolio[ticker] = {
+                quantity: quantity,
+                cost_basis: cost,
+                current_value: 0,
+                gain: 0,
+                return: 0,
+              };
+            }
+          }
+        }
+      }
+    }
     for (var stock in portfolio) {
-      const stockQuoteInfo = await getStockQuote(stock);
+      const stockQuoteInfo = await getCurrentStockValue(stock);
+      console.log(stockQuoteInfo);
       var curr_price = stockQuoteInfo.c;
       portfolio[stock].current_value = curr_price * portfolio[stock].quantity;
-      portfolio[stock].gain =
-        portfolio[stock].current_value - portfolio[stock].cost_basis;
-      portfolio[stock].return =
-        portfolio[stock].gain / portfolio[stock].cost_basis;
+      portfolio[stock].gain = portfolio[stock].current_value - portfolio[stock].cost_basis;
+      portfolio[stock].return = portfolio[stock].gain / portfolio[stock].cost_basis;
     }
     return portfolio;
-  };
+  })();
 }
+
+
+// function getCurrentPortfolioValue(portfolio = {}) {
+//   // return (async () => {
+//     var keys = (Object.keys(portfolio));
+//     keys.forEach(async stock => {
+//       console.log(stock);
+//       // const stockQuoteInfo = await getCurrentStockValue(stock);
+//       // console.log(stockQuoteInfo);
+//       // var curr_price = stockQuoteInfo.c;
+//       // portfolio[stock].current_value = curr_price * portfolio[stock].quantity;
+//       // portfolio[stock].gain = portfolio[stock].current_value - portfolio[stock].cost_basis;
+//       // portfolio[stock].return = portfolio[stock].gain / portfolio[stock].cost_basis;
+//       getCurrentStockValue(stock).then((result) => {
+//         var curr_price = result.c
+//         portfolio[stock].current_value = curr_price * portfolio[stock].quantity;
+//         portfolio[stock].gain = portfolio[stock].current_value - portfolio[stock].cost_basis;
+//         portfolio[stock].return = portfolio[stock].gain / portfolio[stock].cost_basis;
+//       })
+//     })
+//     return portfolio;
+//   // })();
+// }
 
 /**
  * Given an amount to update the balance by, update the user's cash balance
@@ -410,3 +466,71 @@ function getFriendData() {
     };
   });
 }
+
+
+
+function buildPortfolioTable() {
+  (async () => {
+    console.log('in Portfolio Table function')
+    const updatedPortfolio = await getCurrentPortfolioValue();
+
+      if (updatedPortfolio) {
+        let resultsDiv = document.getElementById("portfolio breakdown");
+        resultsString = "";
+        resultsString = `
+          <table class="table">
+            <thead>
+              <tr>`;
+        let stockTicker = Object.keys(updatedPortfolio);
+        // let tableHeaders = Object.keys(updatedPortfolio[stockTicker[0]]);
+        let tableHeaders = ["quantity", "cost_basis", "current_value", "gain", "return"]
+        let tableHeaders2 = [
+          "Stock",
+          "Quantity",
+          "Cost Basis",
+          "Current Value",
+          "Unrealized Gains/Losses",
+          "Investment Returns"
+        ];
+        for (let i = 0; i < tableHeaders2.length; i++) {
+          resultsString += `<th scope="col">${tableHeaders2[i]}</th>`;
+        }
+        resultsString += `</tr>
+        </thead>
+        <tbody>
+        `;
+        for (let i = 0; i < stockTicker.length; i++) {
+          resultsString += `<tr>`;
+          let currentStock = stockTicker[i];
+          resultsString += `<td>${currentStock}</td>`;
+          for (let j = 0; j < tableHeaders.length; j++) {
+            let currentAttribute = tableHeaders[j];
+            if (j == 1 || j == 2 || j == 3){
+              var value = updatedPortfolio[currentStock][currentAttribute].toLocaleString({minimumFractionDigits: 2})
+              resultsString += `<td> $${value}</td>`;
+            } else if (j == 4) {
+              var value = (updatedPortfolio[currentStock][currentAttribute]*100).toFixed(2)
+              resultsString += `<td> ${value}%</td>`;
+            } else {
+              resultsString += `<td>${updatedPortfolio[currentStock][currentAttribute]}</td>`;
+            }
+          }
+          resultsString += `</tr>`;
+        }
+        resultsString += `</tbody></table>`;
+        resultsDiv.innerHTML = resultsString;
+      }
+    // })
+  })();
+}
+
+
+
+firebase.auth().onAuthStateChanged(function(user){
+  if (user) {
+    (async () => {
+      console.log('calling portfolio table function')
+      buildPortfolioTable();
+    })();
+  }
+})

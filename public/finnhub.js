@@ -18,9 +18,11 @@ function getCompanyNews() {
 }
 
 function getStockQuote(quote = null) {
-  var ticker = document.getElementById("company").value;
+  var ticker; 
   if (quote != null) {
     ticker = quote;
+  } else {
+    ticker = document.getElementById("company").value;
   }
 
   var url = "/stockquote/" + ticker;
@@ -30,11 +32,39 @@ function getStockQuote(quote = null) {
     superagent
       .get(url)
       .then(function (res) {
-        console.log("Company Quote Acquired!");
+        console.log( ticker + " Quote Acquired!");
         console.log(res.body);
         document.getElementById("ticker").innerHTML = ticker;
         document.getElementById("open").innerHTML = "$" + round(res.body.o, 2);
         document.getElementById("current").innerHTML ="$" + round(res.body.c, 2);
+        return res.body;
+      })
+      .catch((err) => {
+          console.log(err)
+      })
+      .then((result) => {
+        resolve(result);
+      });
+  });
+}
+
+function getCurrentStockValue(quote = null) {
+  var ticker; 
+  if (quote != null) {
+    ticker = quote;
+  } else {
+    ticker = document.getElementById("company").value;
+  }
+
+  var url = "/stockquote/" + ticker;
+
+  return new Promise((resolve, reject) => {
+    console.log("making super agent call");
+    superagent
+      .get(url)
+      .then(function (res) {
+        console.log( ticker + " Quote Acquired!");
+        console.log(res.body);
         return res.body;
       })
       .catch((err) => {
@@ -240,4 +270,8 @@ function getmuhstuff() {
   getGraph();
   getStockQuote();
 }
+
+
+
+
 
