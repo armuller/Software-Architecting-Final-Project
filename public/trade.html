@@ -67,7 +67,7 @@
             <!-- Heading -->
             <div class="sidebar-heading">Trade Stocks</div>
 
-            
+
             <!-- Nav Item - Buy/Sell Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="trade.html">
@@ -192,106 +192,107 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Trade Stocks</h1>
-                    <!-- Purchase Stock Functionality -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="col-auto">    
-                                        <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
-                                            Trade Stock
-                                            <input id="num_shares" type="text" class="form-control ml-2" aria-label="Number of shares" placeholder="number of shares (positive number to buy and negative number to sell)"></input>
-                                            <button id="purchase_stock" class="btn btn-primary ml-3  mt-2" onclick="purchaseStock(true)">Buy stock</button>
-                                            <button id="sell_stock" class="btn btn-primary ml-3  mt-2" onclick="purchaseStock(false)">Sell stock</button>
+
+                    <div class="row row-cols-1">
+                        <!-- Trade stocks -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="col-auto">
+                                                <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
+                                                    Trade Stock
+                                                    <input id="num_shares" type="text" class="form-control ml-2"
+                                                        aria-label="Number of shares"
+                                                        placeholder="Number of Shares"></input>
+                                                    <button id="purchase_stock" class="btn btn-primary ml-3  mt-2"
+                                                        onclick="purchaseStock(true)">Buy stock</button>
+                                                    <button id="sell_stock" class="btn btn-primary ml-3  mt-2"
+                                                        onclick="purchaseStock(false)">Sell stock</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                    
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!--Deposit Funds-->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="col-auto">
+                                                <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
+                                                    Deposit Funds
+                                                    <input id="deposit_amount" type="text" class="form-control ml-2"
+                                                        aria-label="Deposit Amount"
+                                                        placeholder="Deposit Amount"></input>
+                                                    <button id="deposit" class="btn btn-primary ml-3  mt-2"
+                                                        onclick="depositFunds()">Deposit Funds</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                    
-                </div>
-                    <!--Deposit Funds-->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="col-auto">    
-                                        <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
-                                            Deposit Funds
-                                            <input id="deposit_amount" type="text" class="form-control ml-2" aria-label="Deposit Amount" placeholder="Deposit Amount"></input>
-                                            <button id="deposit" class="btn btn-primary ml-3  mt-2" onclick="depositFunds()">Deposit Funds</button>
-                                        </div>
-                                    
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="buy_sell_result" class='mt-3'></div>
-                    <div id="status"></div>
-                </div>
-                    <!--Table for Stock Quote-->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
-                                            Stock Quote</div>
-                                        <div id="stock_quote">
-                                            <table class="table">
-                                                <tr>
-                                                    <td>Stock</td>
-                                                    <td id="ticker"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Opening Price</td>
-                                                    <td id="open"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Current Price</td>
-                                                    <td id="current"></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="row row-cols-1">
+                        <div id="buy_sell_result" class='mt-3'></div>
+                        <div id="status"></div>
                     </div>
 
-                    <!-- Graph of Stock Trend-->
-                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Stock Trend</h6>
-                        <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Dropdown Header:</div>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                    <div class="row row-cols-2">
+                        <!--Table for Stock Quote-->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
+                                                Stock Quote</div>
+                                            <div id="stock_quote">
+                                                <table class="table">
+                                                    <tr>
+                                                        <td>Stock</td>
+                                                        <td id="ticker"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Opening Price</td>
+                                                        <td id="open"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Current Price</td>
+                                                        <td id="current"></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Card Body -->
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="stock_graph_canvas"></canvas>
+
+                        <!-- Graph of Stock Trend-->
+                        <div class="col-xl-8 col-lg-7">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Stock Trend</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="stock_graph_canvas"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <!-- /.container-fluid -->
+
             </div>
             <!-- End of Main Content -->
 
