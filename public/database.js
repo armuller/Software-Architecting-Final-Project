@@ -401,10 +401,12 @@ function resetAllHTMLDivs() {
 function getTransactions() {
   (async () => {
     const currentUser = await getCurrentUser();
-    const transactions = currentUser.transactions;
-    console.log(transactions);
-    if (transactions) {
-      let resultsDiv = document.getElementById("transactions");
+    let transactions = currentUser.transactions;
+    transactions = transactions.filter(tran => {
+      return tran.num_shares !== 0;
+    });
+    let resultsDiv = document.getElementById("transactions");
+    if (Object.keys(transactions).length > 0) {
       let resultsString = "";
       resultsString = `
         <table class="table">
@@ -425,15 +427,22 @@ function getTransactions() {
       <tbody>
       `;
       for (let i = 0; i < transactions.length; i++) {
+        if (transactions[i].num_shares == 0) {
+          continue;
+        }
         resultsString += `<tr>`;
         for (let j = 0; j < tableHeaders.length; j++) {
           let currentHeader = tableHeaders[j];
+          console.log('current header')
+          console.log(currentHeader)
           resultsString += `<td>${transactions[i][currentHeader]}</td>`;
         }
         resultsString += `</tr>`;
       }
       resultsString += `</tbody></table>`;
       resultsDiv.innerHTML = resultsString;
+    } else {
+      resultsDiv.innerHTML = 'No recorded transaction'; 
     }
     return transactions;
   })();
@@ -529,7 +538,7 @@ function buildPortfolioTable() {
 
 
 firebase.auth().onAuthStateChanged(function(user){
-  if (user) {
+  if (user && window.location.pathname == '/index.html') {
     (async () => {
       buildPortfolioTable();
     })();
