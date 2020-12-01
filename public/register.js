@@ -61,6 +61,9 @@ signup.addEventListener("click", (e) => {
     })
     .catch((e) => {
       console.log(e.message);
+      registerStatus.innerHTML = `<div class="alert alert-warning mt-3" role="alert">
+      ${e.message}
+      </div>`
     });
 });
 
