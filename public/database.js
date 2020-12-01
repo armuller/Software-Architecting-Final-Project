@@ -99,6 +99,14 @@ function purchaseStock(isBuy) {
   const numShares = parseInt(document.getElementById("num_shares").value);
   console.log("buy sell result is");
   console.log(buySellResult);
+  console.log(stock)
+  if (stock.length == 0) {
+    console.log('in if statement')
+    status.innerHTML = `<div class="alert alert-warning mt-3" role="alert">
+            Please provide a stock ticker
+          </div>`;
+    return;
+  }
 
   (async () => {
     console.log("getting stock data");
@@ -414,8 +422,9 @@ function getTransactions() {
             <tr>`;
       let tableHeaders = Object.keys(transactions[0]);
       let tableHeaders2 = [
-        "Number of Shares Purchased",
-        "Purchase Price ($)",
+        "Transaction Type",
+        "Number of Shares",
+        "Transaction Price ($)",
         "Purchase Date/Time (UNIX)",
         "Stock Ticker",
       ];
@@ -431,11 +440,14 @@ function getTransactions() {
           continue;
         }
         resultsString += `<tr>`;
+        if (transactions[i].num_shares > 0) {
+          resultsString += `<td>Buy</td>`;
+        } else {
+          resultsString += `<td>Sell</td>`;
+        }
         for (let j = 0; j < tableHeaders.length; j++) {
           let currentHeader = tableHeaders[j];
-          console.log('current header')
-          console.log(currentHeader)
-          resultsString += `<td>${transactions[i][currentHeader]}</td>`;
+          resultsString += `<td>${Math.abs(transactions[i][currentHeader])}</td>`;
         }
         resultsString += `</tr>`;
       }
@@ -446,12 +458,6 @@ function getTransactions() {
     }
     return transactions;
   })();
-}
-
-function getFriendsPerformance() {
-  const friendemail = document.getElementById("friend_email");
-  const firebaseuser = firebase.auth().getUserByEmail(friendemail);
-  console.log(firebaseuser.balance);
 }
 
 function getFriendData() {
