@@ -18,25 +18,24 @@ function getCompanyNews() {
 }
 
 function getStockQuote(quote = null) {
-  var ticker = document.getElementById("company").value;
+  var ticker; 
   if (quote != null) {
     ticker = quote;
+  } else {
+    ticker = document.getElementById("company").value;
   }
 
   var url = "/stockquote/" + ticker;
 
   return new Promise((resolve, reject) => {
-    console.log("making super agent call");
     superagent
       .get(url)
       .then(function (res) {
-        console.log("Company Quote Acquired!");
+        console.log( ticker + " Quote Acquired!");
         console.log(res.body);
-        //document.getElementById("stock_quote").innerHTML = JSON.stringify(res.body);
         document.getElementById("ticker").innerHTML = ticker;
         document.getElementById("open").innerHTML = "$" + round(res.body.o, 2);
-        document.getElementById("current").innerHTML =
-          "$" + round(res.body.c, 2);
+        document.getElementById("current").innerHTML ="$" + round(res.body.c, 2);
         return res.body;
       })
       .catch((err) => {
@@ -48,48 +47,69 @@ function getStockQuote(quote = null) {
   });
 }
 
-function getCandleStick() {
-  var ticker = document.getElementById("company").value;
+function getCurrentStockValue(quote = null) {
+  var ticker; 
+  if (quote != null) {
+    ticker = quote;
+  } else {
+    ticker = document.getElementById("company").value;
+  }
+
+  var url = "/stockquote/" + ticker;
+
+  return new Promise((resolve, reject) => {
+    superagent
+      .get(url)
+      .then(function (res) {
+        console.log( ticker + " Quote Acquired!");
+        console.log(res.body);
+        return res.body;
+      })
+      .catch((err) => {
+          console.log(err)
+      })
+      .then((result) => {
+        resolve(result);
+      });
+  });
+}
+
+function getCandleStick(stock = null, date = null) {
+  var ticker;
+  if (stock != null) {
+    ticker = stock;
+  } else {
+    ticker = document.getElementById("company").value;
+  };
+  
   var endDate = parseInt(new Date().getTime() / 1000);
+  if (date != null){
+    endDate = parseInt(date/1000);
+  };
+
   var startDate = endDate - 30 * 24 * 60 * 60;
 
   var url = "/candlestick/" + ticker + "/" + startDate + "/" + endDate;
 
-  superagent.get(url).end(function (err, res) {
-    if (err) {
-      console.log(err);
-      document.getElementById("stock_graph_canvas").innerHTML =
-        "Acquiring CandleStick Failed!";
-    } else {
-      console.log("Company Candle Stick Acquired!");
+  return new Promise((resolve, reject) => {
+    superagent.get(url).then(function(res) {
 
       var i;
       var time = [];
       for (i = 0; i < res.body.t.length; i++) {
         time.push(timeConverter(res.body.t[i]));
       }
-      console.log(time);
-      var myLineChart2 = new Chart(
-        document.getElementById("stock_graph_canvas"),
-        {
-          type: "line",
-          data: {
-            labels: time,
-            datasets: [
-              {
-                label: ticker + " Stock Price",
-                data: res.body.c,
-                fill: false,
-                borderColor: "rgb(75, 192, 192)",
-                lineTension: 0.1,
-              },
-            ],
-          },
-          options: {},
-        }
-      );
-    }
-  });
+      return res.body;
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    .then((result) => {
+      resolve(result);
+    });
+
+  })
+  
 }
 
 function buyAndSell() {
@@ -124,16 +144,76 @@ function timeConverter(UNIX_timestamp) {
     date + " " + month + " " + year;
   return time;
 }
-console.log(timeConverter(0));
 
 // Got this from stack overflow
 function round(value, decimals) {
   return Number(Math.round(value + "e" + decimals) + "e-" + decimals);
 }
 
-// stock quote
-// request(`https://finnhub.io/api/v1/quote?symbol=AAPL&token=${token}`, { json: true }, (err, res, body) => {
-//   if (err) { return console.log(err); }
-//   console.log('successfully received stock information')
-//   console.log(body);
-// });
+function getGraph(stock = null, date = null) {
+  var ticker;
+  if (stock != null) {
+    ticker = stock;
+  } else {
+    ticker = document.getElementById("company").value;
+  };
+  
+  var endDate = parseInt(new Date().getTime() / 1000);
+  if (date != null){
+    endDate = parseInt(date/1000);
+  };
+
+  var startDate = endDate - 30 * 24 * 60 * 60;
+
+  var url = "/candlestick/" + ticker + "/" + startDate + "/" + endDate;
+
+  return new Promise((resolve, reject) => {
+    superagent.get(url).end(function (err, res) {
+        if (err) {
+          console.log(err);
+          document.getElementById("stock_graph_canvas").innerHTML =
+            "Acquiring CandleStick Failed!";
+        } else {
+          console.log("Company Candle Stick Acquired!");
+
+          var i;
+          var time = [];
+          console.log(res.body);
+          for (i = 0; i < res.body.t.length; i++) {
+            time.push(timeConverter(res.body.t[i]));
+          }
+          console.log(time);
+          var myLineChart2 = new Chart(
+            document.getElementById("stock_graph_canvas"),
+            {
+              type: "line",
+              data: {
+                labels: time,
+                datasets: [
+                  {
+                    label: ticker + " Stock Price",
+                    data: res.body.c,
+                    fill: false,
+                    borderColor: "#4e73df",
+                    lineTension: 0.1,
+                  },
+                ],
+              },
+              options: {},
+            }
+          );
+          return res.body;
+        }
+      });
+    });
+}
+
+function getmuhstuff() {
+  getGraph();
+  getStockQuote();
+}
+
+
+
+
+

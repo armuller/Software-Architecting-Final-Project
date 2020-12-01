@@ -1,0 +1,131 @@
+<!doctype html>
+
+<html lang="en">
+ 
+<head>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+  
+  <!-- Superagent -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.8.3/superagent.min.js"></script>
+  
+  <!-- Boostrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+  https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+  
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Chart JS-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+</head>
+
+<body>
+  <!-- Set up Tabs -->
+  <button class="tablink" onclick="openPage('Home', this, 'lightblue')" id="defaultOpen">Home</button>
+  <button class="tablink" onclick="openPage('Account Overview', this, 'lightblue')" id="defaultOpen">Account Overview</button>
+  <button class="tablink" onclick="openPage('Buy/Sell', this, 'lightblue')">Buy/Sell</button>
+  <button class="tablink" onclick="openPage('Social', this, 'lightblue')">Social</button>
+  <button class="tablink" onclick="openPage('Transactions', this, 'lightblue')">Transactions</button>
+
+  <div id="Home" class="tabcontent">
+    <h3>Home</h3>
+    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+      <div class="card-header">Create Account</div>
+      <input id="email" type="email" placeholder="Email" class="ml-2 mr-2"><br>
+      <input id="password" type="password" placeholder="Password" class="ml-2 mr-2"><br>
+    </div>
+    <button id="login" class="btn btn-primary">Login</button>
+    <button id="signup" class="btn btn-primary">SignUp</button>
+    <button id="logout" class="btn btn-primary" style="display:none;">Logout</button>
+    <div id="home_target"></div>
+  </div>
+
+  <div id="Account Overview" class="tabcontent">
+    <h3>Your Stonks are Impressive</h3>
+    <h3>*** Placeholder for Account Table ***</h3>
+    <div id="Account overview target"></div>
+    <br>
+    <button id="read_users_from_db" class="btn btn-primary" onclick="getAllUsers()">Get all users from DB</button>
+    <button id="get_current_user_from_db" class="btn btn-primary" onclick="getCurrentUser()">Get current user from DB</button>
+    <div class="input-group mb-3 mt-3" style="max-width: 50rem;">
+      <input id="stock_ticker" type="text" class="form-control" aria-label="Stock Ticker" placeholder="stock symbol">
+      <input id="num_shares" type="text" class="form-control ml-2" aria-label="Number of shares" placeholder="number of shares (positive number to buy and negative number to sell)">
+      <button id="purchase_stock" class="btn btn-primary ml-3" onclick="purchaseStock(true)">Buy stock</button>
+      <button id="sell_stock" class="btn btn-primary ml-3" onclick="purchaseStock(false)">Sell stock</button>
+    </div>
+
+    <div class="input-group mb-3 mt-3" style="max-width: 20rem;">
+      <div class="input-group-prepend">
+        <span class="input-group-text">$</span>
+      </div>
+      <input id="deposit_amount" type="text" class="form-control" aria-label="Deposit Amount">
+      <button id="deposit_funds" class="btn btn-primary ml-3" onclick="depositFunds()">Deposit Funds</button>
+    </div>
+
+    <div id="buy_sell_result"></div>
+    <div id="status"></div>
+  </div>
+
+  <div id="Buy/Sell" class="tabcontent">
+    <input id="company" type="company" placeholder="Company Symbol" style="position:absolute; top:100px; left:30px;"><br>
+    <button id="stockquote" class="btn btn-primary" onclick="buyAndSell()" style="position:absolute; top:150px; left:30px;">Get Stock Quote</button>
+    <div id = "stock_graph" style="position:absolute; top:200px; left:100px; width:50%; height:50%;">
+      <canvas id="stock_graph_canvas" class="ml-5"></canvas>
+    </div>
+    <div id = "stock_quote" style="position:absolute; top:200px; left:30px;">
+      <table width = "100" border="1">
+        <tr>
+          <td>Stock</td>
+          <td id="ticker"></td>
+        </tr>
+        <tr>
+          <td>Opening Price</td>
+          <td id="open">    </td>
+        </tr>
+        <tr>
+          <td>Current Price</td>
+          <td id="current">    </td>
+        </tr>
+      </table>
+    </div> 
+  </div>
+
+  <div id="Social" class="tabcontent">
+    <input id="friends" placeholder="Input Friends Email"><br>
+    <button id="friends" class="btn btn-primary" onclick="getStockQuote()">See Friend's Performance</button>
+    <div id="Social target"></div>
+  </div>
+
+  <div id="Transactions" class="tabcontent">
+    <button id="transactions" class="btn btn-primary" onclick="">Get past transaction data</button>
+    <div id="Transactions target"></div>
+  </div>
+
+  <div id="target"></div>
+
+
+</body>
+
+<!-- Import Source Scripts-->
+<script src="login.js"></script>
+<script src='finnhub.js'></script>
+<script src='tabs.js'></script>
+<script src='database.js'></script>
+<!-- Test Trading Vue -->  
+<!-- <script src="trading-vue.min.js"></script> -->
+
+<script>
+// Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click();
+</script>
+
+</html>
