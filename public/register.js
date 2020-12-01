@@ -31,28 +31,17 @@ console.log("in signup!");
 // signup
 signup.addEventListener("click", (e) => {
     registerStatus.innerHTML = ''
-    console.log('clicked on sign up!')
-    console.log('sign up')
-    console.log(firstName)
-    console.log(lastName)
-    console.log(signup)
-    console.log(registerEmail)
-    console.log(registerPassword)
-    console.log(repeatPassword)
     if (registerPassword.value !== repeatPassword.value) {
         registerStatus.innerHTML = 	`<div class="alert alert-warning mt-3" role="alert">
             The passwords do not match
             </div>`
             return;
     }
-    console.log('passed password check!')
   // TODO: check for real email
   const auth = firebase.auth();
   auth
     .createUserWithEmailAndPassword(registerEmail.value, registerPassword.value)
     .then((result) => {
-      console.log("created user!");
-      console.log(result);
       const displayName = `${firstName.value} ${lastName.value}`
       document.cookie = `displayName:${displayName}`
       return result.user.updateProfile({

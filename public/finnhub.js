@@ -65,11 +65,9 @@ function getCandleStick(stock = null, date = null) {
 
   return new Promise((resolve, reject) => {
     superagent.get(url).then(function(res) {
-      console.log("Company Candle Stick Acquired!");
 
       var i;
       var time = [];
-      console.log(res.body);
       for (i = 0; i < res.body.t.length; i++) {
         time.push(timeConverter(res.body.t[i]));
       }
