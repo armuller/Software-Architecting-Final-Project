@@ -403,8 +403,8 @@ function getFriendData() {
         if (something[i].email == status) {
           var balance = something[i].balance;
           console.log(balance);
-          display.innerHTML = `<div class="alert alert-warning mt-3" role="alert">
-          Your Friend's Balance is: $${balance}
+          display.innerHTML = `<div class="alert alert-success mt-3" role="alert">
+          Your Friend's Balance is: $${balance.toFixed(2)}
         </div>`
         };
     };
