@@ -1,7 +1,6 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
 
     <meta charset="utf-8">
@@ -305,12 +304,6 @@
         </div>
         <!-- End of Content Wrapper -->
 
-    <div class="input-group mb-3 mt-3" style="max-width: 20rem;">
-      <div class="input-group-prepend">
-        <span class="input-group-text">$</span>
-      </div>
-      <input id="deposit_amount" type="text" class="form-control" aria-label="Deposit Amount">
-      <button id="deposit_funds" class="btn btn-primary ml-3" onclick="depositFunds()">Deposit Funds</button>
     </div>
     <!-- End of Page Wrapper -->
 
@@ -339,39 +332,13 @@
         </div>
     </div>
 
-    <div id="buy_sell_result"></div>
-    <div id="status"></div>
-  </div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-  <div id="Buy/Sell" class="tabcontent">
-    <input id="company" type="company" placeholder="Company Symbol" style="position:absolute; top:100px; left:30px;"><br>
-    <button id="stockquote" class="btn btn-primary" onclick="buyAndSell()" style="position:absolute; top:150px; left:30px;">Get Stock Quote</button>
-    <div id = "stock_graph" style="position:absolute; top:200px; left:100px; width:50%; height:50%;">
-      <canvas id="stock_graph_canvas" class="ml-5"></canvas>
-    </div>
-    <div id = "stock_quote" style="position:absolute; top:200px; left:30px;">
-      <table width = "100" border="1">
-        <tr>
-          <td>Stock</td>
-          <td id="ticker"></td>
-        </tr>
-        <tr>
-          <td>Opening Price</td>
-          <td id="open">    </td>
-        </tr>
-        <tr>
-          <td>Current Price</td>
-          <td id="current">    </td>
-        </tr>
-      </table>
-    </div> 
-  </div>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-  <div id="Social" class="tabcontent">
-    <input id="friends" placeholder="Input Friends Email"><br>
-    <button id="friends" class="btn btn-primary" onclick="getStockQuote()">See Friend's Performance</button>
-    <div id="Social target"></div>
-  </div>
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
     <script src="login.js"></script>
@@ -380,12 +347,8 @@
     <script src='database.js'></script>
     <script src='js/util.js'></script>
 
-  <div id="Transactions" class="tabcontent">
-    <button id="transactions" class="btn btn-primary" onclick="">Get past transaction data</button>
-    <div id="Transactions target"></div>
-  </div>
-
-  <div id="target"></div>
+    <!-- Page level plugins -->
+    <script src="vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
     <script src="js/charts/net-worth-chart.js"></script>
