@@ -27,36 +27,3 @@ if (logout) {
     firebase.auth().signOut();
     });
 }
-
-
-// login state
-firebase.auth().onAuthStateChanged((firebaseUser) => {
-  console.log("in logout on auth state changed");
-  if (firebaseUser) {
-    console.log("firebase user is: ");
-    console.log(firebaseUser);
-    const userId = firebaseUser.uid;
-    firebase
-      .database()
-      .ref("/users/" + userId)
-      .once("value", (snapshot) => {
-        if (snapshot.exists()) {
-          console.log("account exists!");
-          console.log(snapshot.val());
-        } else {
-          console.log("account does not exist yet");
-          console.log(userId);
-          // add new user to DB if the user does not exist yet
-          addNewUser();
-        }
-      });
-  } else {
-    console.log('User is not logged in');
-    if (
-        window.location.pathname != "/login.html" &&
-        window.location.pathname != "/register.html"
-      ) {
-        window.location.href = "/login.html";
-      }
-  }
-});
