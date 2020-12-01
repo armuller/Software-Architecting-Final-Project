@@ -133,7 +133,7 @@ firebase.auth().onAuthStateChanged(function(user){
         data: {
           labels: graph.time,
           datasets: [{
-            label: "Earnings",
+            label: "Value",
             lineTension: 0.3,
             backgroundColor: "rgba(78, 115, 223, 0.05)",
             borderColor: "rgba(78, 115, 223, 1)",
