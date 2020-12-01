@@ -20,39 +20,38 @@ if (!firebase.apps.length) {
 // get elements
 const signup = document.getElementById("signup");
 var firstName = document.getElementById("registerFirstName");
-var lastName = document.getElementById('registerLastName');
-const registerEmail    = document.getElementById('registerEmail');
-const registerPassword = document.getElementById('registerPassword');
-const repeatPassword = document.getElementById('registerRepeatPassword');
-const registerStatus = document.getElementById('registerStatus');
+var lastName = document.getElementById("registerLastName");
+const registerEmail = document.getElementById("registerEmail");
+const registerPassword = document.getElementById("registerPassword");
+const repeatPassword = document.getElementById("registerRepeatPassword");
+const registerStatus = document.getElementById("registerStatus");
 console.log("in signup!");
-
 
 // signup
 signup.addEventListener("click", (e) => {
-    registerStatus.innerHTML = ''
-    if (registerPassword.value !== repeatPassword.value) {
-        registerStatus.innerHTML = 	`<div class="alert alert-warning mt-3" role="alert">
+  registerStatus.innerHTML = "";
+  if (registerPassword.value !== repeatPassword.value) {
+    registerStatus.innerHTML = `<div class="alert alert-warning mt-3" role="alert">
             The passwords do not match
-            </div>`
-            return;
-    }
+            </div>`;
+    return;
+  }
   // TODO: check for real email
   const auth = firebase.auth();
   auth
     .createUserWithEmailAndPassword(registerEmail.value, registerPassword.value)
     .then((result) => {
-      const displayName = `${firstName.value} ${lastName.value}`
-      document.cookie = `displayName:${displayName}`
+      const displayName = `${firstName.value} ${lastName.value}`;
+      document.cookie = `displayName:${displayName}`;
       return result.user.updateProfile({
-          displayName: `${displayName}`
+        displayName: `${displayName}`,
       });
     })
     .catch((e) => {
       console.log(e.message);
       registerStatus.innerHTML = `<div class="alert alert-warning mt-3" role="alert">
       ${e.message}
-      </div>`
+      </div>`;
     });
 });
 
@@ -77,7 +76,7 @@ firebase.auth().onAuthStateChanged((firebaseUser) => {
           addNewUser();
         }
 
-        window.location.href = '/index.html'
+        window.location.href = "/index.html";
       });
   } else {
     console.log("User is not logged in");

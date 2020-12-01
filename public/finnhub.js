@@ -28,7 +28,6 @@ function getStockQuote(quote = null) {
   var url = "/stockquote/" + ticker;
 
   return new Promise((resolve, reject) => {
-    console.log("making super agent call");
     superagent
       .get(url)
       .then(function (res) {
@@ -59,7 +58,6 @@ function getCurrentStockValue(quote = null) {
   var url = "/stockquote/" + ticker;
 
   return new Promise((resolve, reject) => {
-    console.log("making super agent call");
     superagent
       .get(url)
       .then(function (res) {
@@ -101,25 +99,6 @@ function getCandleStick(stock = null, date = null) {
       for (i = 0; i < res.body.t.length; i++) {
         time.push(timeConverter(res.body.t[i]));
       }
-      // var myLineChart2 = new Chart(
-      //   document.getElementById("stock_graph_canvas"),
-      //   {
-      //     type: "line",
-      //     data: {
-      //       labels: time,
-      //       datasets: [
-      //         {
-      //           label: ticker + " Stock Price",
-      //           data: res.body.c,
-      //           fill: false,
-      //           borderColor: "rgb(75, 192, 192)",
-      //           lineTension: 0.1,
-      //         },
-      //       ],
-      //     },
-      //     options: {},
-      //   }
-      // );
       return res.body;
     })
     .catch((err) => {
@@ -131,43 +110,6 @@ function getCandleStick(stock = null, date = null) {
 
   })
   
-  // superagent.get(url).end(function (err, res) {
-  //   if (err) {
-  //     console.log(err);
-  //     document.getElementById("stock_graph_canvas").innerHTML =
-  //       "Acquiring CandleStick Failed!";
-  //   } else {
-  //     console.log("Company Candle Stick Acquired!");
-
-  //     var i;
-  //     var time = [];
-  //     console.log(res.body);
-  //     for (i = 0; i < res.body.t.length; i++) {
-  //       time.push(timeConverter(res.body.t[i]));
-  //     }
-  //     console.log(time);
-  //     var myLineChart2 = new Chart(
-  //       document.getElementById("stock_graph_canvas"),
-  //       {
-  //         type: "line",
-  //         data: {
-  //           labels: time,
-  //           datasets: [
-  //             {
-  //               label: ticker + " Stock Price",
-  //               data: res.body.c,
-  //               fill: false,
-  //               borderColor: "rgb(75, 192, 192)",
-  //               lineTension: 0.1,
-  //             },
-  //           ],
-  //         },
-  //         options: {},
-  //       }
-  //     );
-  //     return res.body;
-  //   }
-  // });
 }
 
 function buyAndSell() {

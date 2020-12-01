@@ -15,6 +15,13 @@ function getCookie(cname) {
     return "";
   }
 
+// Function to hide the loading Spinner
+function hideSpinner(elementName) {
+  if (document.getElementById(elementName)) {
+    document.getElementById(elementName).style.display = "none";
+  }
+  
+}
 
 var displayName = document.getElementById('displayName');
 displayName.innerHTML = getCookie('displayName');

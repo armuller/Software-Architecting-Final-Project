@@ -405,7 +405,7 @@ function getTransactions() {
     console.log(transactions);
     if (transactions) {
       let resultsDiv = document.getElementById("transactions");
-      resultsString = "";
+      let resultsString = "";
       resultsString = `
         <table class="table">
           <thead>
@@ -468,21 +468,19 @@ function getFriendData() {
 }
 
 
-
 function buildPortfolioTable() {
   (async () => {
-    console.log('in Portfolio Table function')
     const updatedPortfolio = await getCurrentPortfolioValue();
-
-      if (updatedPortfolio) {
-        let resultsDiv = document.getElementById("portfolio breakdown");
-        resultsString = "";
+    let resultsDiv = document.getElementById("portfolio breakdown");
+      if (Object.keys(updatedPortfolio).length !== 0) {
+        console.log('got updated portfolio')
+        console.log(updatedPortfolio)
+        let resultsString = "";
         resultsString = `
           <table class="table">
             <thead>
               <tr>`;
         let stockTicker = Object.keys(updatedPortfolio);
-        // let tableHeaders = Object.keys(updatedPortfolio[stockTicker[0]]);
         let tableHeaders = ["quantity", "cost_basis", "current_value", "gain", "return"]
         let tableHeaders2 = [
           "Stock",
@@ -519,17 +517,20 @@ function buildPortfolioTable() {
         }
         resultsString += `</tbody></table>`;
         resultsDiv.innerHTML = resultsString;
+      } else {
+        resultsDiv.innerHTML = 'Nothing in portfolio';
+      }
+      if (resultsDiv) {
+        hideSpinner('is_portfolio_breakdown_loading');
       }
     // })
   })();
 }
 
 
-
 firebase.auth().onAuthStateChanged(function(user){
   if (user) {
     (async () => {
-      console.log('calling portfolio table function')
       buildPortfolioTable();
     })();
   }

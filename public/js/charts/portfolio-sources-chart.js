@@ -120,7 +120,15 @@ firebase.auth().onAuthStateChanged(function(user){
         resultString += `<span class="mr-2">
         <i class="fas fa-circle text-primary-${n}"></i>${graph.stockTickers[n]}</span>`
       }
+      console.log('results string is')
+      console.log(resultString)
+      if (resultString.length == 0) {
+        resultString = 'Nothing in portfolio'
+      }
       legendDiv.innerHTML = resultString;
+      if (legendDiv) {
+        hideSpinner('is_portfolio_sources_loading');
+      }
     })();
   }
 });

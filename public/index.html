@@ -82,7 +82,7 @@
 
             <!-- Nav Item - Transactions-->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="transactions.html">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Transactions</span></a>
             </li>
@@ -255,7 +255,13 @@
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-pie pt-4 pb-2">
+                                        <!-- loading spinner -->
+                                        <div class="spinner-border text-primary" style="left: 45%; position: relative"
+                                            role="status" id="is_portfolio_sources_loading">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
                                         <canvas id="myPieChart"></canvas>
+                                        
                                     </div>
                                     <div class="mt-4 text-center small" id="pie_chart_legend">
                                     </div>
@@ -271,6 +277,11 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
+                                <!-- loading spinner -->
+                                <div class="spinner-border text-primary" style="left: 45%; position: relative"
+                                    role="status" id="is_portfolio_breakdown_loading">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
                                 <table id="portfolio breakdown" class="table table-bordered" id="dataTable" width="100%"
                                     cellspacing="0">
                                 </table>
@@ -334,14 +345,14 @@
     <script src="logout.js"></script>
     <script src='finnhub.js'></script>
     <script src='database.js'></script>
-    <script src='js/cookie.js'></script>
+    <script src='js/util.js'></script>
 
     <!-- Page level plugins -->
     <script src="vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+    <script src="js/charts/net-worth-chart.js"></script>
+    <script src="js/charts/portfolio-sources-chart.js"></script>
 
 </body>
 
